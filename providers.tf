@@ -12,13 +12,6 @@ terraform {
       version = "~> 1.41.0"
     }
   }
-
-  cloud {
-    organization = "beto-najera"
-    workspaces {
-      name = "terraform-fargate-mongodb"
-    }
-  }
 }
 
 provider "aws" {
