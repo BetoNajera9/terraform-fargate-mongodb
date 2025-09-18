@@ -82,11 +82,6 @@ variable "ecs_desired_count" {
   default     = 1
 }
 
-variable "ecs_subnets" {
-  description = "A list of subnet IDs associated with the task or service"
-  type        = list(string)
-}
-
 variable "ecs_sg_id" {
   description = "The ID of the security group to associate with the task or service"
   type        = string

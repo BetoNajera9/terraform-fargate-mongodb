@@ -36,7 +36,7 @@ resource "aws_ecs_task_definition" "ecs_task" {
   ])
 }
 
-resource "aws_ecs_service" "this" {
+resource "aws_ecs_service" "ecs_service" {
   name            = "${var.cluster_name}-service"
   cluster         = aws_ecs_cluster.this.id
   task_definition = aws_ecs_task_definition.this.arn
@@ -44,7 +44,7 @@ resource "aws_ecs_service" "this" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = var.subnets
+    subnets          = var.subnets[1]
     security_groups  = [var.ecs_sg_id]
     assign_public_ip = false
   }
