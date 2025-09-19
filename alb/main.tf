@@ -1,7 +1,7 @@
 resource "aws_security_group" "alb_sg" {
   name        = var.sg_name
   description = "Allow HTTP and HTTPS traffic"
-  vpc_id      = aws_vpc.main_vpc.id
+  vpc_id      = var.vpc_main_vpc_id
 
   tags = {
     Name = var.sg_name
@@ -62,7 +62,7 @@ resource "aws_lb_target_group" "app_tg" {
 }
 
 resource "aws_lb_listener" "app_listener" {
-  load_balancer_arn = aws_lb.app_alb.arn
+  load_balancer_arn = aws_lb.app_lb.arn
   port              = var.listener_port
   protocol          = var.listener_protocol
 
