@@ -10,7 +10,7 @@ resource "aws_security_group" "alb_sg" {
 
 resource "aws_vpc_security_group_ingress_rule" "allow_http_ipv4" {
   security_group_id = aws_security_group.alb_sg.id
-  cidr_ipv4         = aws_vpc.main_vpc.cidr_block
+  cidr_ipv4         = var.vpc_cidr
   from_port         = 80
   ip_protocol       = "tcp"
   to_port           = 80
@@ -18,7 +18,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http_ipv4" {
 
 resource "aws_vpc_security_group_ingress_rule" "allow_hhtps_ipv4" {
   security_group_id = aws_security_group.alb_sg.id
-  cidr_ipv6         = aws_vpc.main.ipv6_cidr_block
+  cidr_ipv4         = var.vpc_cidr
   from_port         = 443
   ip_protocol       = "tcp"
   to_port           = 443
@@ -45,7 +45,7 @@ resource "aws_lb_target_group" "app_tg" {
   name     = var.tg_name
   port     = var.tg_port
   protocol = var.tg_protocol
-  vpc_id   = aws_vpc.main_vpc.id
+  vpc_id   = var.vpc_main_vpc_id
 
   health_check {
     path                = var.tg_health_check_path

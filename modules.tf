@@ -17,6 +17,9 @@ module "alb" {
   tg_health_check_path = var.alb_tg_health_check_path
   listener_port        = var.alb_listener_port
   listener_protocol    = var.alb_listener_protocol
+
+  vpc_cidr        = var.vpc_vpc_cidr
+  vpc_main_vpc_id = module.vpc.vpc_id
 }
 
 module "iam" {
