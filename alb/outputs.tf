@@ -5,12 +5,12 @@ output "alb_arn" {
 
 output "alb_dns_name" {
   description = "DNS público del ALB"
-  value       = aws_lb.app_alb.dns_name
+  value       = aws_lb.app_lb.dns_name
 }
 
 output "alb_zone_id" {
   description = "Hosted Zone ID del ALB (para integrarlo con Route53)"
-  value       = aws_lb.app_alb.zone_id
+  value       = aws_lb.app_lb.zone_id
 }
 
 output "alb_sg_id" {
