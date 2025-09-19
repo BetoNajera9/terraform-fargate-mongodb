@@ -70,8 +70,8 @@ arena-terraform/
 ---
 
 ## 📌 Roadmap
-- [ ] VPC and networking setup
-- [ ] ECS cluster with Fargate and ALB
+- [x] VPC and networking setup
+- [x] ECS cluster with Fargate and ALB
 - [ ] MongoDB Atlas integration
 - [ ] CI/CD with GitHub Actions
 - [ ] Sentinel policies for governance
