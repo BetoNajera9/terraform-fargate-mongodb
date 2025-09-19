@@ -44,16 +44,18 @@ resource "aws_ecs_service" "ecs_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = var.subnets[1]
-    security_groups  = [var.ecs_sg_id]
+    subnets          = aws_subnet.private_subnet.id
     assign_public_ip = false
   }
 
-  # load_balancer {
-  #   target_group_arn = var.alb_target_arn
-  #   container_name   = var.container_name
-  #   container_port   = var.container_port
-  # }
+  load_balancer {
+    target_group_arn = aws_lb_target_group.app_tg.arn
+    container_name   = var.container_name
+    container_port   = var.container_port
+  }
 
-  depends_on = [aws_ecs_task_definition.this]
+  depends_on = [
+    aws_lb_listener.app_listener,
+    aws_ecs_task_definition.ecs_task
+  ]
 }
