@@ -42,4 +42,8 @@ module "ecs" {
 
   iam_execution_role_arn = module.iam.ecs_task_execution_role_arn
   iam_task_role_arn      = module.iam.ecs_task_role_arn
+
+  vpc_private_subnet_id = var.vpc_subnets[1]
+
+  alb_target_group_arn = module.alb.app_tg_arn
 }
