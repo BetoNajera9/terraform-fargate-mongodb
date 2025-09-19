@@ -1,46 +1,43 @@
 variable "cluster_name" {
   description = "The name of the ECS cluster"
   type        = string
+  default     = "ecs-cluster"
 }
 
 variable "task_family" {
   description = "The family of the ECS task definition"
   type        = string
+  default     = "nginx-app"
 }
 
 variable "cpu" {
   description = "The number of CPU units used by the task"
   type        = string
+  default     = 512
 }
 
 variable "memory" {
   description = "The amount of memory (in MiB) used by the task"
   type        = string
-}
-
-variable "execution_role_arn" {
-  description = "The ARN of the task execution role that the Amazon ECS container agent and the Docker daemon can assume"
-  type        = string
-}
-
-variable "task_role_arn" {
-  description = "The ARN of the IAM role that containers in this task can assume"
-  type        = string
+  default     = 1024
 }
 
 variable "container_name" {
   description = "The name of the container"
   type        = string
+  default     = "nginx-container"
 }
 
 variable "container_image" {
   description = "The image used to start a container"
   type        = string
+  default     = "nginx:latest"
 }
 
 variable "container_port" {
   description = "The port number on the container that is bound to the user-specified or automatically assigned host port"
   type        = number
+  default     = 80
 }
 
 variable "desired_count" {
