@@ -44,7 +44,7 @@ resource "aws_ecs_service" "ecs_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = aws_subnet.private_subnet.id
+    subnets          = [var.vpc_private_subnet_id]
     assign_public_ip = false
   }
 
@@ -55,7 +55,6 @@ resource "aws_ecs_service" "ecs_service" {
   }
 
   depends_on = [
-    aws_lb_listener.app_listener,
     aws_ecs_task_definition.ecs_task
   ]
 }

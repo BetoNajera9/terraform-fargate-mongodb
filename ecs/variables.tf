@@ -56,3 +56,10 @@ variable "iam_task_role_arn" {
   description = "The ARN of the IAM role that allows your task to make AWS API calls"
   type        = string
 }
+
+# Refused from VPC module
+
+variable "vpc_private_subnet_id" {
+  description = "The ID of the private subnet where the ECS tasks will be launched"
+  type        = string
+}
