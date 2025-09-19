@@ -17,6 +17,9 @@ module "alb" {
   tg_health_check_path = var.alb_tg_health_check_path
   listener_port        = var.alb_listener_port
   listener_protocol    = var.alb_listener_protocol
+
+  vpc_cidr        = var.vpc_vpc_cidr
+  vpc_main_vpc_id = module.vpc.vpc_id
 }
 
 module "iam" {
@@ -36,4 +39,7 @@ module "ecs" {
   container_name  = var.ecs_container_name
   container_image = var.ecs_container_image
   container_port  = var.ecs_container_port
+
+  iam_execution_role_arn = module.iam.ecs_task_execution_role_arn
+  iam_task_role_arn      = module.iam.ecs_task_role_arn
 }

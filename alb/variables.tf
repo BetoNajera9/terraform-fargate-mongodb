@@ -45,3 +45,14 @@ variable "listener_protocol" {
   type        = string
   default     = "HTTP"
 }
+
+# Reused from VPC module
+variable "vpc_cidr" {
+  description = "The CIDR block for the VPC"
+  type        = string
+}
+
+variable "vpc_main_vpc_id" {
+  description = "The ID of the main VPC"
+  type        = string
+}

@@ -17,8 +17,8 @@ resource "aws_ecs_task_definition" "ecs_task" {
   requires_compatibilities = ["FARGATE"]
   cpu                      = var.cpu
   memory                   = var.memory
-  execution_role_arn       = module.iam.ecs_task_execution_role_arn
-  task_role_arn            = module.iam.ecs_task_role_arn
+  execution_role_arn       = var.iam_execution_role_arn
+  task_role_arn            = var.iam_task_role_arn
 
   container_definitions = jsonencode([
     {
@@ -38,8 +38,8 @@ resource "aws_ecs_task_definition" "ecs_task" {
 
 resource "aws_ecs_service" "ecs_service" {
   name            = "${var.cluster_name}-service"
-  cluster         = aws_ecs_cluster.this.id
-  task_definition = aws_ecs_task_definition.this.arn
+  cluster         = aws_ecs_cluster.main_ecs.id
+  task_definition = aws_ecs_task_definition.ecs_task.arn
   desired_count   = var.desired_count
   launch_type     = "FARGATE"
 
