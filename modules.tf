@@ -6,20 +6,6 @@ module "vpc" {
   az       = var.vpc_az
 }
 
-module "ecs" {
-  source = "./ecs"
-
-  cluster_name       = var.ecs_cluster_name
-  task_family        = var.ecs_task_family
-  cpu                = var.ecs_cpu
-  memory             = var.ecs_memory
-  execution_role_arn = var.ecs_execution_role_arn
-  task_role_arn      = var.ecs_task_role_arn
-  container_name     = var.ecs_container_name
-  container_image    = var.ecs_container_image
-  container_port     = var.ecs_container_port
-}
-
 module "alb" {
   source = "./alb"
 
@@ -31,4 +17,23 @@ module "alb" {
   tg_health_check_path = var.alb_tg_health_check_path
   listener_port        = var.alb_listener_port
   listener_protocol    = var.alb_listener_protocol
+}
+
+module "iam" {
+  source = "./iam"
+
+  ecs_task_execution_role_name = var.iam_ecs_task_execution_role_name
+  ecs_task_role_name           = var.iam_ecs_task_role_name
+}
+
+module "ecs" {
+  source = "./ecs"
+
+  cluster_name    = var.ecs_cluster_name
+  task_family     = var.ecs_task_family
+  cpu             = var.ecs_cpu
+  memory          = var.ecs_memory
+  container_name  = var.ecs_container_name
+  container_image = var.ecs_container_image
+  container_port  = var.ecs_container_port
 }
