@@ -20,7 +20,7 @@ module "alb" {
 
   vpc_cidr             = var.vpc_vpc_cidr
   vpc_main_vpc_id      = module.vpc.vpc_id
-  vpc_public_subnet_id = var.vpc_subnets[0]
+  vpc_public_subnet_id = module.vpc.public_subnet_id
 }
 
 module "iam" {
@@ -44,7 +44,7 @@ module "ecs" {
   iam_execution_role_arn = module.iam.ecs_task_execution_role_arn
   iam_task_role_arn      = module.iam.ecs_task_role_arn
 
-  vpc_private_subnet_id = var.vpc_subnets[1]
+  vpc_private_subnet_id = module.vpc.private_subnet_id
 
   alb_target_group_arn = module.alb.alb_target_group_arn
 }
