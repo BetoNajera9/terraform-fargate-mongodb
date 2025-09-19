@@ -31,6 +31,7 @@ variable "vpc_az" {
   type        = string
 }
 
+# ECS Variables
 variable "ecs_cluster_name" {
   description = "The name of the ECS cluster"
   type        = string
@@ -79,7 +80,6 @@ variable "ecs_container_port" {
 variable "ecs_desired_count" {
   description = "The number of instances of the task definition to place and keep running in your service"
   type        = number
-  default     = 1
 }
 
 variable "ecs_sg_id" {
@@ -87,3 +87,44 @@ variable "ecs_sg_id" {
   type        = string
 }
 
+# ALB Variables
+
+variable "alb_app_lb_name" {
+  description = "Nombre del Application Load Balancer"
+  type        = string
+}
+
+variable "alb_sg_name" {
+  description = "Nombre del Security Group para el ALB"
+  type        = string
+}
+
+variable "alb_tg_name" {
+  description = "Nombre del Target Group"
+  type        = string
+}
+
+variable "alb_tg_port" {
+  description = "Puerto donde escucha el Target Group"
+  type        = number
+}
+
+variable "alb_tg_protocol" {
+  description = "Protocolo para el Target Group"
+  type        = string
+}
+
+variable "alb_tg_health_check_path" {
+  description = "Path para el health check del ALB"
+  type        = string
+}
+
+variable "alb_listener_port" {
+  description = "Puerto en el que escucha el listener"
+  type        = number
+}
+
+variable "alb_listener_protocol" {
+  description = "Protocolo del listener"
+  type        = string
+}
