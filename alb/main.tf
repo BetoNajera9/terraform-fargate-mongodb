@@ -34,7 +34,7 @@ resource "aws_lb" "app_lb" {
   name               = var.app_lb_name
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
-  subnets            = [aws_subnet.public_subnet.id]
+  subnets            = [var.vpc_public_subnet_id]
 
   tags = {
     Name = var.app_lb_name

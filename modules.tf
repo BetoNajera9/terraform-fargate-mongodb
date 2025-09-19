@@ -18,8 +18,9 @@ module "alb" {
   listener_port        = var.alb_listener_port
   listener_protocol    = var.alb_listener_protocol
 
-  vpc_cidr        = var.vpc_vpc_cidr
-  vpc_main_vpc_id = module.vpc.vpc_id
+  vpc_cidr             = var.vpc_vpc_cidr
+  vpc_main_vpc_id      = module.vpc.vpc_id
+  vpc_public_subnet_id = var.vpc_subnets[0]
 }
 
 module "iam" {
