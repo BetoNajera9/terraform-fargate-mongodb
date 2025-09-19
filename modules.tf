@@ -46,5 +46,5 @@ module "ecs" {
 
   vpc_private_subnet_id = var.vpc_subnets[1]
 
-  alb_target_group_arn = module.alb.app_tg_arn
+  alb_target_group_arn = module.alb.alb_target_group_arn
 }
