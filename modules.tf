@@ -36,4 +36,7 @@ module "ecs" {
   container_name  = var.ecs_container_name
   container_image = var.ecs_container_image
   container_port  = var.ecs_container_port
+
+  iam_execution_role_arn = module.iam.ecs_task_execution_role_arn
+  iam_task_role_arn      = module.iam.ecs_task_role_arn
 }

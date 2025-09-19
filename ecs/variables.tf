@@ -45,3 +45,14 @@ variable "desired_count" {
   type        = number
   default     = 1
 }
+
+# Refused from IAM module
+variable "iam_execution_role_arn" {
+  description = "The ARN of the IAM role that allows your Amazon ECS container agent to make AWS API calls on your behalf"
+  type        = string
+}
+
+variable "iam_task_role_arn" {
+  description = "The ARN of the IAM role that allows your task to make AWS API calls"
+  type        = string
+}
