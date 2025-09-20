@@ -58,9 +58,9 @@ variable "iam_task_role_arn" {
 }
 
 # Refused from VPC module
-variable "vpc_private_subnet_id" {
-  description = "The ID of the private subnet where the ECS tasks will be launched"
-  type        = string
+variable "vpc_private_subnets_id" {
+  description = "The ID of the private subnets where the ECS tasks will be launched"
+  type        = list(string)
 }
 
 # Refused from ALB module
