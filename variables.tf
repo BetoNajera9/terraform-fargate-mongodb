@@ -21,14 +21,14 @@ variable "vpc_vpc_cidr" {
   type        = string
 }
 
-variable "vpc_subnets" {
-  description = "List of subnet CIDR blocks"
-  type        = list(string)
+variable "vpc_public_subnets" {
+  description = "Map of AZs to public subnet CIDR blocks"
+  type        = map(string)
 }
 
-variable "vpc_az" {
-  description = "Availability zone"
-  type        = string
+variable "vpc_private_subnet" {
+  description = "Map of AZ to private subnet CID blocks"
+  type        = map(string)
 }
 
 # ALB Variables

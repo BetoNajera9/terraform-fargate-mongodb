@@ -16,26 +16,30 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-# Public subnet
-resource "aws_subnet" "public_subnet" {
+# Public subnets
+resource "aws_subnet" "public_subnets" {
+  for_each = var.public_subnets
+
   vpc_id                  = aws_vpc.main_vpc.id
-  cidr_block              = var.subnets[0]
-  availability_zone       = var.az
+  cidr_block              = each.value
+  availability_zone       = each.key
   map_public_ip_on_launch = true # Asign automatic public IP
 
   tags = {
-    Name = "public_subnet_main_vpc"
+    Name = "public_subnet_${each.key}_main_vpc"
   }
 }
 
-# Private subnet
-resource "aws_subnet" "private_subnet" {
+# Private subnets
+resource "aws_subnet" "private_subnets" {
+  for_each = var.private_subnet
+
   vpc_id            = aws_vpc.main_vpc.id
-  cidr_block        = var.subnets[1]
-  availability_zone = var.az
+  cidr_block        = each.value
+  availability_zone = each.key
 
   tags = {
-    Name = "private_subnet_main_vpc"
+    Name = "private_subnet_${each.key}_main_vpc"
   }
 }
 
@@ -54,7 +58,9 @@ resource "aws_route_table" "public_crt" {
 }
 
 resource "aws_route_table_association" "crta_public_subnets" {
-  subnet_id      = aws_subnet.public_subnet.id
+  for_each = aws_subnet.public_subnets
+
+  subnet_id      = each.value.id
   route_table_id = aws_route_table.public_crt.id
 }
 
@@ -80,7 +86,7 @@ resource "aws_nat_gateway" "nat" {
 }
 
 # 3. Route Table privada (apunta al NAT)
-resource "aws_route_table" "private" {
+resource "aws_route_table" "private_crt" {
   vpc_id = aws_vpc.main_vpc.id
 
   route {
@@ -94,6 +100,8 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route_table_association" "private_assoc" {
-  subnet_id      = aws_subnet.private_subnet.id
-  route_table_id = aws_route_table.private.id
+  for_each = aws_subnet.private_subnets
+
+  subnet_id      = each.value.id
+  route_table_id = aws_route_table.private_crt.id
 }
