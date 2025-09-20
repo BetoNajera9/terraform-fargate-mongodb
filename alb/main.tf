@@ -34,7 +34,7 @@ resource "aws_lb" "app_lb" {
   name               = var.app_lb_name
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
-  subnets            = [var.vpc_public_subnet_id]
+  subnets            = var.vpc_public_subnets_id
 
   tags = {
     Name = var.app_lb_name
@@ -42,10 +42,11 @@ resource "aws_lb" "app_lb" {
 }
 
 resource "aws_lb_target_group" "app_tg" {
-  name     = var.tg_name
-  port     = var.tg_port
-  protocol = var.tg_protocol
-  vpc_id   = var.vpc_main_vpc_id
+  name        = var.tg_name
+  port        = var.tg_port
+  protocol    = var.tg_protocol
+  vpc_id      = var.vpc_main_vpc_id
+  target_type = "ip"
 
   health_check {
     path                = var.tg_health_check_path

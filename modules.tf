@@ -1,9 +1,9 @@
 module "vpc" {
   source = "./vpc"
 
-  vpc_cidr = var.vpc_vpc_cidr
-  subnets  = var.vpc_subnets
-  az       = var.vpc_az
+  vpc_cidr       = var.vpc_vpc_cidr
+  public_subnets = var.vpc_public_subnets
+  private_subnet = var.vpc_private_subnet
 }
 
 module "alb" {
@@ -18,9 +18,9 @@ module "alb" {
   listener_port        = var.alb_listener_port
   listener_protocol    = var.alb_listener_protocol
 
-  vpc_cidr             = var.vpc_vpc_cidr
-  vpc_main_vpc_id      = module.vpc.vpc_id
-  vpc_public_subnet_id = module.vpc.public_subnet_id
+  vpc_cidr              = var.vpc_vpc_cidr
+  vpc_main_vpc_id       = module.vpc.vpc_id
+  vpc_public_subnets_id = module.vpc.public_subnets_id
 }
 
 module "iam" {
@@ -44,7 +44,7 @@ module "ecs" {
   iam_execution_role_arn = module.iam.ecs_task_execution_role_arn
   iam_task_role_arn      = module.iam.ecs_task_role_arn
 
-  vpc_private_subnet_id = module.vpc.private_subnet_id
+  vpc_private_subnets_id = module.vpc.private_subnets_id
 
   alb_target_group_arn = module.alb.alb_target_group_arn
 }
