@@ -148,3 +148,16 @@ variable "route53_subdomain_name" {
   type        = string
   default     = "www.beto-najera.terraform.com"
 }
+
+# ACM (SSL Certificate) Variables
+variable "acm_domain_name" {
+  description = "The domain name for the SSL certificate"
+  type        = string
+  default     = "www.beto-najera.terraform.com"
+}
+
+variable "acm_subject_alternative_names" {
+  description = "Additional domains to include in the SSL certificate"
+  type        = list(string)
+  default     = ["beto-najera.terraform.com"]
+}

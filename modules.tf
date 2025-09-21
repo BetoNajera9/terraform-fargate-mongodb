@@ -59,3 +59,13 @@ module "route53" {
   alb_dns_name = module.alb.alb_dns_name
   alb_zone_id  = module.alb.alb_zone_id
 }
+
+module "acm" {
+  source = "./acm"
+
+  domain_name               = var.route53_subdomain_name
+  subject_alternative_names = var.acm_subject_alternative_names
+  hosted_zone_id            = module.route53.hosted_zone_id
+
+  depends_on = [module.route53]
+}
