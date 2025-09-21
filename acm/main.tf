@@ -29,7 +29,7 @@ resource "aws_route53_record" "cert_validation" {
   records         = [each.value.record]
   ttl             = 60
   type            = each.value.type
-  zone_id         = var.hosted_zone_id
+  zone_id         = var.route53_hosted_zone_id
 }
 
 # Esperar a que la validación DNS se complete
