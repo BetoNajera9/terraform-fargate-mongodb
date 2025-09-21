@@ -1,3 +1,5 @@
+data "aws_region" "current" {}
+
 resource "aws_ecs_cluster" "main_ecs" {
   name = var.cluster_name
 
@@ -32,6 +34,24 @@ resource "aws_ecs_task_definition" "ecs_task" {
           protocol      = "tcp"
         }
       ]
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = "/ecs/${var.task_family}"
+          "awslogs-region"        = data.aws_region.current.name
+          "awslogs-stream-prefix" = "ecs"
+          "awslogs-create-group"  = "true"
+        }
+      }
+
+      healthCheck = {
+        command     = ["CMD-SHELL", "curl -f http://localhost:${var.container_port}/ || exit 1"]
+        interval    = 30
+        timeout     = 5
+        retries     = 3
+        startPeriod = 60
+      }
     }
   ])
 }
@@ -42,6 +62,8 @@ resource "aws_ecs_service" "ecs_service" {
   task_definition = aws_ecs_task_definition.ecs_task.arn
   desired_count   = var.desired_count
   launch_type     = "FARGATE"
+
+  health_check_grace_period_seconds = 300
 
   network_configuration {
     subnets          = var.vpc_private_subnets_id
