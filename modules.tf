@@ -49,3 +49,13 @@ module "ecs" {
   alb_target_group_arn  = module.alb.alb_target_group_arn
   alb_security_group_id = module.alb.alb_sg_id
 }
+
+module "route53" {
+  source = "./route53"
+
+  domain_name    = var.route53_domain_name
+  subdomain_name = var.route53_subdomain_name
+
+  alb_dns_name = module.alb.alb_dns_name
+  alb_zone_id  = module.alb.alb_zone_id
+}
