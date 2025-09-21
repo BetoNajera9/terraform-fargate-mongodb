@@ -87,12 +87,6 @@ variable "iam_ecs_task_execution_role_name" {
   default     = "ecsTaskExecutionRole"
 }
 
-variable "iam_ecs_task_role_name" {
-  description = "Nombre del rol de task de ECS"
-  type        = string
-  default     = "ecsTaskRoleTest"
-}
-
 # ECS Variables
 variable "ecs_cluster_name" {
   description = "The name of the ECS cluster"
