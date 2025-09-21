@@ -1,5 +1,3 @@
-data "aws_region" "current" {}
-
 resource "aws_ecs_cluster" "main_ecs" {
   name = var.cluster_name
 
@@ -20,7 +18,6 @@ resource "aws_ecs_task_definition" "ecs_task" {
   cpu                      = var.cpu
   memory                   = var.memory
   execution_role_arn       = var.iam_execution_role_arn
-  task_role_arn            = var.iam_task_role_arn
 
   container_definitions = jsonencode([
     {
@@ -39,7 +36,7 @@ resource "aws_ecs_task_definition" "ecs_task" {
         logDriver = "awslogs"
         options = {
           "awslogs-group"         = "/ecs/${var.task_family}"
-          "awslogs-region"        = data.aws_region.current.name
+          "awslogs-region"        = var.aws_region
           "awslogs-stream-prefix" = "ecs"
           "awslogs-create-group"  = "true"
         }

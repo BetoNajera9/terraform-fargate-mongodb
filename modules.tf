@@ -26,7 +26,6 @@ module "iam" {
   source = "./iam"
 
   ecs_task_execution_role_name = var.iam_ecs_task_execution_role_name
-  ecs_task_role_name           = var.iam_ecs_task_role_name
 }
 
 module "ecs" {
@@ -40,8 +39,9 @@ module "ecs" {
   container_image = var.ecs_container_image
   container_port  = var.ecs_container_port
 
+  aws_region = var.aws_region
+
   iam_execution_role_arn = module.iam.iam_ecs_task_execution_role_arn
-  iam_task_role_arn      = module.iam.iam_ecs_task_role_arn
 
   vpc_private_subnets_id = module.vpc.vpc_private_subnets_id
   vpc_main_vpc_id        = module.vpc.vpc_id
