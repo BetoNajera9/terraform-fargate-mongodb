@@ -19,7 +19,7 @@ module "alb" {
   listener_protocol    = var.alb_listener_protocol
 
   vpc_main_vpc_id       = module.vpc.vpc_id
-  vpc_public_subnets_id = module.vpc.public_subnets_id
+  vpc_public_subnets_id = module.vpc.vpc_public_subnets_id
 }
 
 module "iam" {
@@ -40,10 +40,12 @@ module "ecs" {
   container_image = var.ecs_container_image
   container_port  = var.ecs_container_port
 
-  iam_execution_role_arn = module.iam.ecs_task_execution_role_arn
-  iam_task_role_arn      = module.iam.ecs_task_role_arn
+  iam_execution_role_arn = module.iam.iam_ecs_task_execution_role_arn
+  iam_task_role_arn      = module.iam.iam_ecs_task_role_arn
 
-  vpc_private_subnets_id = module.vpc.private_subnets_id
+  vpc_private_subnets_id = module.vpc.vpc_private_subnets_id
+  vpc_main_vpc_id        = module.vpc.vpc_id
 
-  alb_target_group_arn = module.alb.alb_target_group_arn
+  alb_target_group_arn  = module.alb.alb_target_group_arn
+  alb_security_group_id = module.alb.alb_sg_id
 }
