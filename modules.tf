@@ -40,6 +40,8 @@ module "ecs" {
   container_image = var.ecs_container_image
   container_port  = var.ecs_container_port
 
+  aws_region = var.aws_region
+
   iam_execution_role_arn = module.iam.iam_ecs_task_execution_role_arn
   iam_task_role_arn      = module.iam.iam_ecs_task_role_arn
 

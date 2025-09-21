@@ -84,3 +84,8 @@ variable "alb_security_group_id" {
   description = "The security group ID of the ALB to allow traffic from ALB to ECS tasks"
   type        = string
 }
+
+variable "aws_region" {
+  description = "AWS region for logs configuration"
+  type        = string
+}
