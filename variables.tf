@@ -135,3 +135,29 @@ variable "ecs_desired_count" {
   type        = number
   default     = 1
 }
+
+# Route 53 Variables
+variable "route53_domain_name" {
+  description = "The domain name for the hosted zone"
+  type        = string
+  default     = "beto-najera.com"
+}
+
+variable "route53_subdomain_name" {
+  description = "The subdomain name to create"
+  type        = string
+  default     = "www.beto-najera.terraform.com"
+}
+
+# ACM (SSL Certificate) Variables
+variable "acm_domain_name" {
+  description = "The domain name for the SSL certificate"
+  type        = string
+  default     = "www.beto-najera.terraform.com"
+}
+
+variable "acm_subject_alternative_names" {
+  description = "Additional domains to include in the SSL certificate"
+  type        = list(string)
+  default     = ["beto-najera.terraform.com"]
+}
