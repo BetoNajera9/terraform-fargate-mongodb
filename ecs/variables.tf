@@ -46,6 +46,12 @@ variable "desired_count" {
   default     = 1
 }
 
+variable "sg_name" {
+  description = "The name of the security group for ECS tasks"
+  type        = string
+  default     = "ecs-sg"
+}
+
 # Refused from IAM module
 variable "iam_execution_role_arn" {
   description = "The ARN of the IAM role that allows your Amazon ECS container agent to make AWS API calls on your behalf"
@@ -63,8 +69,18 @@ variable "vpc_private_subnets_id" {
   type        = list(string)
 }
 
+variable "vpc_main_vpc_id" {
+  description = "The ID of the main VPC where the ECS tasks will be launched"
+  type        = string
+}
+
 # Refused from ALB module
 variable "alb_target_group_arn" {
   description = "The ARN of the ALB target group to associate with the ECS service"
+  type        = string
+}
+
+variable "alb_security_group_id" {
+  description = "The security group ID of the ALB to allow traffic from ALB to ECS tasks"
   type        = string
 }
