@@ -50,10 +50,12 @@ resource "aws_lb_target_group" "app_tg" {
 
   health_check {
     path                = var.tg_health_check_path
+    protocol            = var.tg_protocol
+    port                = "traffic-port"
     interval            = 30
-    timeout             = 5
-    healthy_threshold   = 3
-    unhealthy_threshold = 3
+    timeout             = 10
+    healthy_threshold   = 2
+    unhealthy_threshold = 5
     matcher             = "200-399"
   }
 
