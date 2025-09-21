@@ -66,6 +66,7 @@ module "acm" {
   domain_name               = var.route53_subdomain_name
   subject_alternative_names = var.acm_subject_alternative_names
   hosted_zone_id            = module.route53.hosted_zone_id
+  validation_timeout        = var.acm_validation_timeout
 
   depends_on = [module.route53]
 }
