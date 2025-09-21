@@ -58,11 +58,6 @@ variable "iam_execution_role_arn" {
   type        = string
 }
 
-variable "iam_task_role_arn" {
-  description = "The ARN of the IAM role that allows your task to make AWS API calls"
-  type        = string
-}
-
 # Refused from VPC module
 variable "vpc_private_subnets_id" {
   description = "The ID of the private subnets where the ECS tasks will be launched"
@@ -82,5 +77,10 @@ variable "alb_target_group_arn" {
 
 variable "alb_security_group_id" {
   description = "The security group ID of the ALB to allow traffic from ALB to ECS tasks"
+  type        = string
+}
+
+variable "aws_region" {
+  description = "AWS region for logs configuration"
   type        = string
 }
