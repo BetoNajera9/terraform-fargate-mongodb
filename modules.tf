@@ -20,6 +20,9 @@ module "alb" {
 
   vpc_main_vpc_id       = module.vpc.vpc_id
   vpc_public_subnets_id = module.vpc.vpc_public_subnets_id
+
+  acm_ssl_certificate_arn = module.acm.acm_certificate_arn
+  depends_on              = [module.acm]
 }
 
 module "iam" {
@@ -65,8 +68,7 @@ module "acm" {
 
   domain_name               = var.route53_subdomain_name
   subject_alternative_names = var.acm_subject_alternative_names
-  hosted_zone_id            = module.route53.hosted_zone_id
   validation_timeout        = var.acm_validation_timeout
 
-  depends_on = [module.route53]
+  route53_hosted_zone_id = module.route53.route53_hosted_zone_id
 }
