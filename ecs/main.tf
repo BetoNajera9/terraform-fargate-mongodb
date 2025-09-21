@@ -72,7 +72,6 @@ resource "aws_security_group" "ecs_sg" {
 resource "aws_vpc_security_group_ingress_rule" "allow_http_ipv4" {
   security_group_id            = aws_security_group.ecs_sg.id
   referenced_security_group_id = var.alb_security_group_id
-  cidr_ipv4                    = "0.0.0.0/0"
   from_port                    = var.container_port
   ip_protocol                  = "tcp"
   to_port                      = var.container_port
