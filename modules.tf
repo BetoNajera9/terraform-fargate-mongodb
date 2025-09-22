@@ -39,7 +39,7 @@ module "ecs" {
   cpu             = var.ecs_cpu
   memory          = var.ecs_memory
   container_name  = var.ecs_container_name
-  container_image = var.ecs_container_image
+  container_image = var.ecs_use_ecr ? "${module.ecr.ecr_repository_url}:${var.ecs_image_tag}" : var.ecs_container_image
   container_port  = var.ecs_container_port
 
   aws_region = var.aws_region
@@ -51,6 +51,14 @@ module "ecs" {
 
   alb_target_group_arn  = module.alb.alb_target_group_arn
   alb_security_group_id = module.alb.alb_sg_id
+}
+
+module "ecr" {
+  source = "./ecr"
+
+  repository_name      = var.ecr_repository_name
+  image_tag_mutability = var.ecr_image_tag_mutability
+  encryption_type      = var.ecr_encryption_type
 }
 
 module "route53" {
