@@ -53,6 +53,14 @@ module "ecs" {
   alb_security_group_id = module.alb.alb_sg_id
 }
 
+module "ecr" {
+  source = "./ecr"
+
+  repository_name      = var.ecr_repository_name
+  image_tag_mutability = var.ecr_image_tag_mutability
+  encryption_type      = var.ecr_encryption_type
+}
+
 module "route53" {
   source = "./route53"
 

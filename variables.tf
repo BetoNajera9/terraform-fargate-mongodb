@@ -158,3 +158,22 @@ variable "acm_validation_timeout" {
   type        = string
   default     = "10m"
 }
+
+# ECR Variables
+variable "ecr_repository_name" {
+  description = "Name of the ECR repository"
+  type        = string
+  default     = "my-ecr-repo"
+}
+
+variable "ecr_image_tag_mutability" {
+  description = "Image tag mutability (MUTABLE or IMMUTABLE)"
+  type        = string
+  default     = "IMMUTABLE"
+}
+
+variable "ecr_encryption_type" {
+  description = "Encryption type for ECR repo (AES256 or KMS)"
+  type        = string
+  default     = "AES256"
+}
