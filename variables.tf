@@ -124,6 +124,18 @@ variable "ecs_container_image" {
   default     = "nginx:latest"
 }
 
+variable "ecs_use_ecr" {
+  description = "If true, deploy the image from the ECR repository created by this stack"
+  type        = bool
+  default     = false
+}
+
+variable "ecs_image_tag" {
+  description = "Image tag to deploy from ECR (ignored if ecs_use_ecr=false)"
+  type        = string
+  default     = "latest"
+}
+
 variable "ecs_container_port" {
   description = "The port number on the container that is bound to the user-specified or automatically assigned host port"
   type        = number

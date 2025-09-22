@@ -39,7 +39,7 @@ module "ecs" {
   cpu             = var.ecs_cpu
   memory          = var.ecs_memory
   container_name  = var.ecs_container_name
-  container_image = var.ecs_container_image
+  container_image = var.ecs_use_ecr ? "${module.ecr.ecr_repository_url}:${var.ecs_image_tag}" : var.ecs_container_image
   container_port  = var.ecs_container_port
 
   aws_region = var.aws_region
