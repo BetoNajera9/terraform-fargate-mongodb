@@ -98,3 +98,16 @@ module "lambda" {
     CONTAINER_NAME      = var.ecs_container_name
   }
 }
+
+module "eventbridge" {
+  source = "./eventbridge"
+
+  rule_name = var.event_bridge_rule_name
+  state     = var.event_bridge_state
+
+  ecr_repository_name = var.ecr_repository_name
+
+  lambda_function_arn  = module.lambda.lambda_function_arn
+  lambda_function_id   = module.lambda.lambda_function_id
+  lambda_function_name = module.lambda.lambda_function_name
+}

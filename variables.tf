@@ -220,3 +220,21 @@ variable "autodeploy_deployment_strategy" {
     error_message = "Deployment strategy must be either FORCE or REGISTER."
   }
 }
+
+# EventBridge Variables
+variable "event_bridge_rule_name" {
+  description = "Name of the EventBridge rule"
+  type        = string
+  default     = "ecr_when_push_rule"
+}
+
+variable "event_bridge_state" {
+  description = "State of the rule (ENABLED or DISABLED)"
+  type        = string
+  default     = "ENABLED"
+
+  validation {
+    condition     = contains(["ENABLED", "DISABLED"], var.event_bridge_state)
+    error_message = "State must be either ENABLED or DISABLED"
+  }
+}
