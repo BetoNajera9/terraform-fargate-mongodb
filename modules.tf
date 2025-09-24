@@ -81,3 +81,20 @@ module "acm" {
 
   route53_hosted_zone_id = module.route53.route53_hosted_zone_id
 }
+
+module "lambda" {
+  source = "./lambda"
+
+  function_name = var.lambda_function_name
+  handler       = var.lambda_handler
+
+  iam_lambda_deployment_strategy_role_arn = module.iam.lambda_deployment_strategy_role_arn
+
+  environment_variables = {
+    CLUSTER             = module.ecs.cluster_id
+    SERVICE             = module.ecs.service_name
+    REPOSITORY_URI      = module.ecr.ecr_repository_url
+    DEPLOYMENT_STRATEGY = var.autodeploy_deployment_strategy
+    CONTAINER_NAME      = var.ecs_container_name
+  }
+}
