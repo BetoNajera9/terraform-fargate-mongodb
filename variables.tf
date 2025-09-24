@@ -87,6 +87,12 @@ variable "iam_ecs_task_execution_role_name" {
   default     = "ecsTaskExecutionRole"
 }
 
+variable "iam_lambda_role_name" {
+  description = "Nombre del rol IAM para la función Lambda"
+  type        = string
+  default     = "lambdaRole"
+}
+
 # ECS Variables
 variable "ecs_cluster_name" {
   description = "The name of the ECS cluster"

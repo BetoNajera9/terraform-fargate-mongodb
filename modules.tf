@@ -29,6 +29,7 @@ module "iam" {
   source = "./iam"
 
   ecs_task_execution_role_name = var.iam_ecs_task_execution_role_name
+  lambda_role_name             = var.iam_lambda_role_name
 }
 
 module "ecs" {
