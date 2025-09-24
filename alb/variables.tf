@@ -46,6 +46,12 @@ variable "listener_protocol" {
   default     = "HTTP"
 }
 
+# Refused from ACM module
+variable "acm_ssl_certificate_arn" {
+  description = "ARN of the SSL certificate from ACM"
+  type        = string
+}
+
 # Reused from VPC module
 variable "vpc_main_vpc_id" {
   description = "The ID of the main VPC"

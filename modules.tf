@@ -20,12 +20,16 @@ module "alb" {
 
   vpc_main_vpc_id       = module.vpc.vpc_id
   vpc_public_subnets_id = module.vpc.vpc_public_subnets_id
+
+  acm_ssl_certificate_arn = module.acm.acm_certificate_arn
+  depends_on              = [module.acm]
 }
 
 module "iam" {
   source = "./iam"
 
   ecs_task_execution_role_name = var.iam_ecs_task_execution_role_name
+  lambda_role_name             = var.iam_lambda_role_name
 }
 
 module "ecs" {
@@ -36,7 +40,7 @@ module "ecs" {
   cpu             = var.ecs_cpu
   memory          = var.ecs_memory
   container_name  = var.ecs_container_name
-  container_image = var.ecs_container_image
+  container_image = var.ecs_use_ecr ? "${module.ecr.ecr_repository_url}:${var.ecs_image_tag}" : var.ecs_container_image
   container_port  = var.ecs_container_port
 
   aws_region = var.aws_region
@@ -48,6 +52,14 @@ module "ecs" {
 
   alb_target_group_arn  = module.alb.alb_target_group_arn
   alb_security_group_id = module.alb.alb_sg_id
+}
+
+module "ecr" {
+  source = "./ecr"
+
+  repository_name      = var.ecr_repository_name
+  image_tag_mutability = var.ecr_image_tag_mutability
+  encryption_type      = var.ecr_encryption_type
 }
 
 module "route53" {
@@ -65,8 +77,37 @@ module "acm" {
 
   domain_name               = var.route53_subdomain_name
   subject_alternative_names = var.acm_subject_alternative_names
-  hosted_zone_id            = module.route53.hosted_zone_id
   validation_timeout        = var.acm_validation_timeout
 
-  depends_on = [module.route53]
+  route53_hosted_zone_id = module.route53.route53_hosted_zone_id
+}
+
+module "lambda" {
+  source = "./lambda"
+
+  function_name = var.lambda_function_name
+  handler       = var.lambda_handler
+
+  iam_lambda_deployment_strategy_role_arn = module.iam.lambda_deployment_strategy_role_arn
+
+  environment_variables = {
+    CLUSTER             = module.ecs.cluster_id
+    SERVICE             = module.ecs.service_name
+    REPOSITORY_URI      = module.ecr.ecr_repository_url
+    DEPLOYMENT_STRATEGY = var.autodeploy_deployment_strategy
+    CONTAINER_NAME      = var.ecs_container_name
+  }
+}
+
+module "eventbridge" {
+  source = "./eventbridge"
+
+  rule_name = var.event_bridge_rule_name
+  state     = var.event_bridge_state
+
+  ecr_repository_name = var.ecr_repository_name
+
+  lambda_function_arn  = module.lambda.lambda_function_arn
+  lambda_function_id   = module.lambda.lambda_function_id
+  lambda_function_name = module.lambda.lambda_function_name
 }

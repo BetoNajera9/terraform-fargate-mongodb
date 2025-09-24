@@ -87,6 +87,12 @@ variable "iam_ecs_task_execution_role_name" {
   default     = "ecsTaskExecutionRole"
 }
 
+variable "iam_lambda_role_name" {
+  description = "Nombre del rol IAM para la función Lambda"
+  type        = string
+  default     = "lambdaRole"
+}
+
 # ECS Variables
 variable "ecs_cluster_name" {
   description = "The name of the ECS cluster"
@@ -124,6 +130,18 @@ variable "ecs_container_image" {
   default     = "nginx:latest"
 }
 
+variable "ecs_use_ecr" {
+  description = "If true, deploy the image from the ECR repository created by this stack"
+  type        = bool
+  default     = false
+}
+
+variable "ecs_image_tag" {
+  description = "Image tag to deploy from ECR (ignored if ecs_use_ecr=false)"
+  type        = string
+  default     = "latest"
+}
+
 variable "ecs_container_port" {
   description = "The port number on the container that is bound to the user-specified or automatically assigned host port"
   type        = number
@@ -157,4 +175,66 @@ variable "acm_validation_timeout" {
   description = "Timeout for ACM certificate validation"
   type        = string
   default     = "10m"
+}
+
+# ECR Variables
+variable "ecr_repository_name" {
+  description = "Name of the ECR repository"
+  type        = string
+  default     = "my-ecr-repo"
+}
+
+variable "ecr_image_tag_mutability" {
+  description = "Image tag mutability (MUTABLE or IMMUTABLE)"
+  type        = string
+  default     = "IMMUTABLE"
+}
+
+variable "ecr_encryption_type" {
+  description = "Encryption type for ECR repo (AES256 or KMS)"
+  type        = string
+  default     = "AES256"
+}
+
+# Lambda Variables
+variable "lambda_function_name" {
+  description = "Name of the autodeployment lambda function"
+  type        = string
+  default     = "deployment-strategy"
+}
+
+variable "lambda_handler" {
+  description = "Lambda function handler"
+  type        = string
+  default     = "deployment-strategy.lambda_handler"
+}
+
+# Autodeploy Variables
+variable "autodeploy_deployment_strategy" {
+  description = "Deployment strategy for auto-deployment (FORCE or REGISTER)"
+  type        = string
+  default     = "FORCE"
+
+  validation {
+    condition     = contains(["FORCE", "REGISTER"], var.autodeploy_deployment_strategy)
+    error_message = "Deployment strategy must be either FORCE or REGISTER."
+  }
+}
+
+# EventBridge Variables
+variable "event_bridge_rule_name" {
+  description = "Name of the EventBridge rule"
+  type        = string
+  default     = "ecr_when_push_rule"
+}
+
+variable "event_bridge_state" {
+  description = "State of the rule (ENABLED or DISABLED)"
+  type        = string
+  default     = "ENABLED"
+
+  validation {
+    condition     = contains(["ENABLED", "DISABLED"], var.event_bridge_state)
+    error_message = "State must be either ENABLED or DISABLED"
+  }
 }
