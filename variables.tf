@@ -87,6 +87,12 @@ variable "iam_ecs_task_execution_role_name" {
   default     = "ecsTaskExecutionRole"
 }
 
+variable "iam_lambda_role_name" {
+  description = "Nombre del rol IAM para la función Lambda"
+  type        = string
+  default     = "lambdaRole"
+}
+
 # ECS Variables
 variable "ecs_cluster_name" {
   description = "The name of the ECS cluster"
@@ -188,4 +194,47 @@ variable "ecr_encryption_type" {
   description = "Encryption type for ECR repo (AES256 or KMS)"
   type        = string
   default     = "AES256"
+}
+
+# Lambda Variables
+variable "lambda_function_name" {
+  description = "Name of the autodeployment lambda function"
+  type        = string
+  default     = "deployment-strategy"
+}
+
+variable "lambda_handler" {
+  description = "Lambda function handler"
+  type        = string
+  default     = "deployment-strategy.lambda_handler"
+}
+
+# Autodeploy Variables
+variable "autodeploy_deployment_strategy" {
+  description = "Deployment strategy for auto-deployment (FORCE or REGISTER)"
+  type        = string
+  default     = "FORCE"
+
+  validation {
+    condition     = contains(["FORCE", "REGISTER"], var.autodeploy_deployment_strategy)
+    error_message = "Deployment strategy must be either FORCE or REGISTER."
+  }
+}
+
+# EventBridge Variables
+variable "event_bridge_rule_name" {
+  description = "Name of the EventBridge rule"
+  type        = string
+  default     = "ecr_when_push_rule"
+}
+
+variable "event_bridge_state" {
+  description = "State of the rule (ENABLED or DISABLED)"
+  type        = string
+  default     = "ENABLED"
+
+  validation {
+    condition     = contains(["ENABLED", "DISABLED"], var.event_bridge_state)
+    error_message = "State must be either ENABLED or DISABLED"
+  }
 }

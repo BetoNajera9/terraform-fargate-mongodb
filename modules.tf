@@ -29,6 +29,7 @@ module "iam" {
   source = "./iam"
 
   ecs_task_execution_role_name = var.iam_ecs_task_execution_role_name
+  lambda_role_name             = var.iam_lambda_role_name
 }
 
 module "ecs" {
@@ -79,4 +80,34 @@ module "acm" {
   validation_timeout        = var.acm_validation_timeout
 
   route53_hosted_zone_id = module.route53.route53_hosted_zone_id
+}
+
+module "lambda" {
+  source = "./lambda"
+
+  function_name = var.lambda_function_name
+  handler       = var.lambda_handler
+
+  iam_lambda_deployment_strategy_role_arn = module.iam.lambda_deployment_strategy_role_arn
+
+  environment_variables = {
+    CLUSTER             = module.ecs.cluster_id
+    SERVICE             = module.ecs.service_name
+    REPOSITORY_URI      = module.ecr.ecr_repository_url
+    DEPLOYMENT_STRATEGY = var.autodeploy_deployment_strategy
+    CONTAINER_NAME      = var.ecs_container_name
+  }
+}
+
+module "eventbridge" {
+  source = "./eventbridge"
+
+  rule_name = var.event_bridge_rule_name
+  state     = var.event_bridge_state
+
+  ecr_repository_name = var.ecr_repository_name
+
+  lambda_function_arn  = module.lambda.lambda_function_arn
+  lambda_function_id   = module.lambda.lambda_function_id
+  lambda_function_name = module.lambda.lambda_function_name
 }
