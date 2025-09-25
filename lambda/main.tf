@@ -1,6 +1,6 @@
 data "archive_file" "lambda_zip" {
   type        = "zip"
-  source_dir  = "./lambda-functions/${var.function_name}"
+  source_file = "./lambda-functions/${var.function_name}.py"
   output_path = "./${var.function_name}.zip"
 }
 
