@@ -18,9 +18,14 @@ output "alb_sg_id" {
   value       = aws_security_group.alb_sg.id
 }
 
-output "alb_listener_arn" {
+output "alb_listener_http_arn" {
   description = "ARN del listener HTTP del ALB"
-  value       = aws_lb_listener.app_listener.arn
+  value       = aws_lb_listener.app_listener_http.arn
+}
+
+output "alb_listener_https_arn" {
+  description = "ARN del listener HTTPS del ALB"
+  value       = aws_lb_listener.app_listener_http.arn
 }
 
 output "alb_target_group_arn" {
