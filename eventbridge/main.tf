@@ -3,15 +3,15 @@ resource "aws_cloudwatch_event_rule" "ecr_when_push_rule" {
   description = "EventBridge rule for ${var.rule_name}"
   state       = var.state
 
-  event_pattern = {
-    "source" : ["aws.ecr"],                         // Qué servicio AWS emite el evento
-    "detail-type" : ["ECR Image Action"],           // Tipo específico de evento
-    "detail" : {                                    // Detalles internos del evento
-      "action-type" : ["PUSH"],                     // Acción específica
-      "result" : ["SUCCESS"],                       // Estado del resultado
-      "repository-name" : [var.ecr_repository_name] // Filtros adicionales
+  event_pattern = jsonencode({
+    "source" : ["aws.ecr"],                         # Qué servicio AWS emite el evento
+    "detail-type" : ["ECR Image Action"],           # Tipo específico de evento
+    "detail" : {                                    # Detalles internos del evento
+      "action-type" : ["PUSH"],                     # Acción específica
+      "result" : ["SUCCESS"],                       # Estado del resultado
+      "repository-name" : [var.ecr_repository_name] # Filtros adicionales
     }
-  }
+  })
 
   tags = {
     Name = var.rule_name
