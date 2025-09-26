@@ -1,5 +1,5 @@
 # Create MongoDB Atlas Organization (optional)
-resource "mongodbatlas_org" "terraform-fargate-mongodb-organization" {
+resource "mongodbatlas_organization" "terraform-fargate-mongodb-organization" {
   count = var.create_organization ? 1 : 0
 
   name        = var.organization_name
@@ -8,7 +8,7 @@ resource "mongodbatlas_org" "terraform-fargate-mongodb-organization" {
 
 # Local value to determine the organization ID to use
 locals {
-  org_id = var.create_organization ? mongodbatlas_org.terraform-fargate-mongodb-organization[0].org_id : var.org_id
+  org_id = var.create_organization ? mongodbatlas_organization.terraform-fargate-mongodb-organization[0].org_id : var.org_id
 }
 
 # Create MongoDB Atlas Project
@@ -23,7 +23,7 @@ resource "mongodbatlas_project" "terraform-fargate-mongodb-project" {
   is_realtime_performance_panel_enabled            = true
   is_schema_advisor_enabled                        = true
 
-  depends_on = [mongodbatlas_org.terraform-fargate-mongodb-organization]
+  depends_on = [mongodbatlas_organization.terraform-fargate-mongodb-organization]
 }
 
 # Create MongoDB Atlas Cluster
