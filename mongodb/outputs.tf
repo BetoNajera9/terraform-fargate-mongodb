@@ -5,7 +5,7 @@ output "organization_id" {
 
 output "organization_name" {
   description = "MongoDB Atlas organization name"
-  value       = var.create_organization ? mongodbatlas_org.terraform-fargate-mongodb-organization[0].name : "Existing organization (ID: ${var.org_id})"
+  value       = var.create_organization ? mongodbatlas_organization.terraform-fargate-mongodb-organization[0].name : "Existing organization (ID: ${var.org_id})"
 }
 
 output "project_id" {
