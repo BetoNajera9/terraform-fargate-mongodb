@@ -256,7 +256,7 @@ variable "mongodb_create_organization" {
 variable "mongodb_organization_name" {
   description = "Name of the MongoDB Atlas organization (required if mongodb_create_organization is true)"
   type        = string
-  default     = null
+  default     = "terraform-fargate-mongodb-organization"
 }
 
 variable "mongodb_org_id" {
@@ -268,11 +268,13 @@ variable "mongodb_org_id" {
 variable "mongodb_project_name" {
   description = "Name of the MongoDB Atlas project"
   type        = string
+  default     = "terraform-fargate-mongodb-project"
 }
 
 variable "mongodb_cluster_name" {
   description = "Name of the MongoDB Atlas cluster"
   type        = string
+  default     = "terraform-fargate-mongodb-cluster"
 }
 
 variable "mongodb_provider_region" {
