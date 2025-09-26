@@ -32,6 +32,8 @@ resource "aws_ecs_task_definition" "ecs_task" {
         }
       ]
 
+      environment = var.environment_variables
+
       logConfiguration = {
         logDriver = "awslogs"
         options = {
