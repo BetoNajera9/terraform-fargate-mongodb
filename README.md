@@ -55,7 +55,8 @@ terraform-fargate-mongodb/
 │   ├── lambda/             # Lambda Functions (generic)
 │   ├── eventbridge/        # EventBridge Rules (generic)
 │   ├── route53/            # DNS & Domain Management
-│   └── acm/                # SSL Certificate Management
+│   ├── acm/                # SSL Certificate Management
+│   └── mongodb/            # MongoDB Atlas Database
 │
 └── 🔧 Application Code
     └── lambda-functions/
@@ -98,6 +99,7 @@ The infrastructure includes a **fully automated deployment pipeline**:
 | **Route53** | DNS management | Domain & subdomain routing |
 | **ACM** | SSL certificates | Automated validation & renewal |
 | **IAM** | Security | Least privilege access policies |
+| **MongoDB Atlas** | NoSQL Database | Managed MongoDB with backup & scaling |
 
 ## 🚀 Quick Start
 
@@ -307,7 +309,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [x] VPC and networking setup
 - [x] ECS cluster with Fargate and ALB
 - [x] ECR repository + auto-deploy trigger to ECS
-- [ ] MongoDB Atlas integration
+- [x] MongoDB Atlas integration
 - [ ] CI/CD with GitHub Actions
 - [ ] Sentinel policies for governance
 
