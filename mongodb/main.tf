@@ -59,7 +59,7 @@ resource "mongodbatlas_cluster" "terraform-fargate-mongodb-cluster" {
 }
 
 # Create database user
-resource "mongodbatlas_database_user" "main" {
+resource "mongodbatlas_database_user" "database_user" {
   username           = var.database_username
   password           = var.database_password
   project_id         = mongodbatlas_project.terraform-fargate-mongodb-project.id
@@ -81,11 +81,11 @@ resource "mongodbatlas_database_user" "main" {
 resource "mongodbatlas_project_ip_access_list" "main" {
   count = length(var.ip_access_list)
 
-  project_id = mongodbatlas_project.main.id
+  project_id = mongodbatlas_project.terraform-fargate-mongodb-project.id
   ip_address = var.ip_access_list[count.index].ip_address
   comment    = var.ip_access_list[count.index].comment
 
-  depends_on = [mongodbatlas_cluster.terraform-fargate-mongodb]
+  depends_on = [mongodbatlas_cluster.terraform-fargate-mongodb-cluster]
 }
 
 resource "mongodbatlas_network_peering" "main" {

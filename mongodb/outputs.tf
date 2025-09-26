@@ -5,45 +5,45 @@ output "organization_id" {
 
 output "organization_name" {
   description = "MongoDB Atlas organization name"
-  value       = var.create_organization ? mongodbatlas_org.main[0].name : "Existing organization (ID: ${var.org_id})"
+  value       = var.create_organization ? mongodbatlas_org.terraform-fargate-mongodb-organization[0].name : "Existing organization (ID: ${var.org_id})"
 }
 
 output "project_id" {
   description = "MongoDB Atlas project ID"
-  value       = mongodbatlas_project.main.id
+  value       = mongodbatlas_project.terraform-fargate-mongodb-project.id
 }
 
 output "cluster_id" {
   description = "MongoDB Atlas cluster ID"
-  value       = mongodbatlas_cluster.main.cluster_id
+  value       = mongodbatlas_cluster.terraform-fargate-mongodb-cluster.cluster_id
 }
 
 output "cluster_name" {
   description = "MongoDB Atlas cluster name"
-  value       = mongodbatlas_cluster.main.name
+  value       = mongodbatlas_cluster.terraform-fargate-mongodb-cluster.name
 }
 
 output "connection_strings" {
   description = "MongoDB connection strings"
-  value       = mongodbatlas_cluster.main.connection_strings
+  value       = mongodbatlas_cluster.terraform-fargate-mongodb-cluster.connection_strings
   sensitive   = true
 }
 
 output "mongo_uri" {
   description = "MongoDB URI for application connection"
-  value       = mongodbatlas_cluster.main.connection_strings[0].standard
+  value       = mongodbatlas_cluster.terraform-fargate-mongodb-cluster.connection_strings[0].standard
   sensitive   = true
 }
 
 output "mongo_uri_srv" {
   description = "MongoDB SRV URI for application connection"
-  value       = mongodbatlas_cluster.main.connection_strings[0].standard_srv
+  value       = mongodbatlas_cluster.terraform-fargate-mongodb-cluster.connection_strings[0].standard_srv
   sensitive   = true
 }
 
 output "database_username" {
   description = "Database username"
-  value       = mongodbatlas_database_user.main.username
+  value       = mongodbatlas_database_user.database_user.username
 }
 
 output "database_name" {
@@ -53,17 +53,17 @@ output "database_name" {
 
 output "cluster_state" {
   description = "Current state of the cluster"
-  value       = mongodbatlas_cluster.main.state_name
+  value       = mongodbatlas_cluster.terraform-fargate-mongodb-cluster.state_name
 }
 
 output "srv_address" {
   description = "SRV address for the cluster"
-  value       = mongodbatlas_cluster.main.srv_address
+  value       = mongodbatlas_cluster.terraform-fargate-mongodb-cluster.srv_address
 }
 
 output "mongo_db_version" {
   description = "MongoDB version"
-  value       = mongodbatlas_cluster.main.mongo_db_version
+  value       = mongodbatlas_cluster.terraform-fargate-mongodb-cluster.mongo_db_version
 }
 
 output "peering_connection_id" {
