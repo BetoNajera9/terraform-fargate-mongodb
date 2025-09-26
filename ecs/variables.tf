@@ -84,3 +84,12 @@ variable "aws_region" {
   description = "AWS region for logs configuration"
   type        = string
 }
+
+variable "environment_variables" {
+  description = "Environment variables to pass to the container"
+  type = list(object({
+    name  = string
+    value = string
+  }))
+  default = []
+}

@@ -238,3 +238,113 @@ variable "event_bridge_state" {
     error_message = "State must be either ENABLED or DISABLED"
   }
 }
+
+# AWS Account ID for VPC peering
+variable "aws_account_id" {
+  description = "AWS Account ID for VPC peering with MongoDB Atlas"
+  type        = string
+  default     = null
+}
+
+# MongoDB Atlas Variables
+variable "mongodb_create_organization" {
+  description = "Whether to create a new MongoDB Atlas organization"
+  type        = bool
+  default     = true
+}
+
+variable "mongodb_organization_name" {
+  description = "Name of the MongoDB Atlas organization (required if mongodb_create_organization is true)"
+  type        = string
+  default     = null
+}
+
+variable "mongodb_org_id" {
+  description = "MongoDB Atlas organization ID (required if mongodb_create_organization is false)"
+  type        = string
+  default     = null
+}
+
+variable "mongodb_project_name" {
+  description = "Name of the MongoDB Atlas project"
+  type        = string
+}
+
+variable "mongodb_cluster_name" {
+  description = "Name of the MongoDB Atlas cluster"
+  type        = string
+}
+
+variable "mongodb_provider_region" {
+  description = "Region for the MongoDB Atlas cluster"
+  type        = string
+  default     = "US_EAST_1"
+}
+
+variable "mongodb_provider_instance_size_name" {
+  description = "Instance size for the MongoDB Atlas cluster (M0 = Free, M2/M5 = Shared, M10+ = Dedicated)"
+  type        = string
+  default     = "M0"
+}
+
+variable "mongodb_major_version" {
+  description = "MongoDB version"
+  type        = string
+  default     = "7.0"
+}
+
+variable "mongodb_auto_scaling_disk_gb_enabled" {
+  description = "Enable auto scaling for disk space (only available for M10+ clusters)"
+  type        = bool
+  default     = false
+}
+
+variable "mongodb_pit_enabled" {
+  description = "Enable Point in Time Recovery (only available for M10+ clusters)"
+  type        = bool
+  default     = false
+}
+
+variable "mongodb_backup_enabled" {
+  description = "Enable backup for the cluster (only available for M10+ clusters)"
+  type        = bool
+  default     = false
+}
+
+variable "mongodb_database_username" {
+  description = "Username for the database user"
+  type        = string
+  sensitive   = true
+}
+
+variable "mongodb_database_password" {
+  description = "Password for the database user"
+  type        = string
+  sensitive   = true
+}
+
+variable "mongodb_database_name" {
+  description = "Name of the database (will be used by Fargate application)"
+  type        = string
+  default     = "myapp"
+}
+
+variable "mongodb_ip_access_list" {
+  description = "List of IP addresses or CIDR blocks allowed to access the cluster"
+  type = list(object({
+    ip_address = string
+    comment    = string
+  }))
+  default = [
+    {
+      ip_address = "0.0.0.0/0"
+      comment    = "Allow all IPs - Change this for production"
+    }
+  ]
+}
+
+variable "mongodb_vpc_peering_enabled" {
+  description = "Enable VPC peering between AWS VPC and MongoDB Atlas for private connectivity"
+  type        = bool
+  default     = false
+}
