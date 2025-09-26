@@ -50,6 +50,7 @@ variable "listener_protocol" {
 variable "acm_ssl_certificate_arn" {
   description = "ARN of the SSL certificate from ACM"
   type        = string
+  default     = null
 }
 
 # Reused from VPC module
