@@ -82,8 +82,12 @@ resource "mongodbatlas_project_ip_access_list" "main" {
   count = length(var.ip_access_list)
 
   project_id = mongodbatlas_project.terraform-fargate-mongodb-project.id
-  ip_address = var.ip_access_list[count.index].ip_address
-  comment    = var.ip_access_list[count.index].comment
+
+  # Use cidr_block if the ip_address contains a slash (CIDR notation), otherwise use ip_address
+  ip_address = can(regex("/", var.ip_access_list[count.index].ip_address)) ? null : var.ip_access_list[count.index].ip_address
+  cidr_block = can(regex("/", var.ip_access_list[count.index].ip_address)) ? var.ip_access_list[count.index].ip_address : null
+
+  comment = var.ip_access_list[count.index].comment
 
   depends_on = [mongodbatlas_cluster.terraform-fargate-mongodb-cluster]
 }
