@@ -45,6 +45,30 @@ module "ecs" {
 
   aws_region = var.aws_region
 
+  # MongoDB environment variables for Fargate application
+  environment_variables = [
+    {
+      name  = "MONGODB_URI"
+      value = module.mongodb.mongo_uri_srv
+    },
+    {
+      name  = "MONGODB_DATABASE"
+      value = module.mongodb.database_name
+    },
+    {
+      name  = "MONGODB_USERNAME"
+      value = module.mongodb.database_username
+    },
+    {
+      name  = "NODE_ENV"
+      value = "production"
+    },
+    {
+      name  = "PORT"
+      value = tostring(var.ecs_container_port)
+    }
+  ]
+
   iam_execution_role_arn = module.iam.iam_ecs_task_execution_role_arn
 
   vpc_private_subnets_id = module.vpc.vpc_private_subnets_id
@@ -52,6 +76,8 @@ module "ecs" {
 
   alb_target_group_arn  = module.alb.alb_target_group_arn
   alb_security_group_id = module.alb.alb_sg_id
+
+  depends_on = [module.mongodb]
 }
 
 module "ecr" {
@@ -110,4 +136,39 @@ module "eventbridge" {
   lambda_function_arn  = module.lambda.lambda_function_arn
   lambda_function_id   = module.lambda.lambda_function_id
   lambda_function_name = module.lambda.lambda_function_name
+}
+
+module "mongodb" {
+  source = "./mongodb"
+
+  # Organization configuration
+  create_organization = var.mongodb_create_organization
+  organization_name   = var.mongodb_organization_name
+  org_id              = var.mongodb_org_id
+
+  # Project and cluster configuration
+  project_name                = var.mongodb_project_name
+  cluster_name                = var.mongodb_cluster_name
+  provider_region             = var.mongodb_provider_region
+  provider_instance_size_name = var.mongodb_provider_instance_size_name
+  mongodb_major_version       = var.mongodb_major_version
+
+  # Features configuration
+  auto_scaling_disk_gb_enabled = var.mongodb_auto_scaling_disk_gb_enabled
+  pit_enabled                  = var.mongodb_pit_enabled
+  backup_enabled               = var.mongodb_backup_enabled
+
+  # Database user configuration
+  database_username = var.mongodb_database_username
+  database_password = var.mongodb_database_password
+  database_name     = var.mongodb_database_name
+
+  # Network access configuration
+  ip_access_list = var.mongodb_ip_access_list
+
+  # Optional VPC peering configuration (reusing existing VPC variables)
+  vpc_cidr_block = var.mongodb_vpc_peering_enabled ? var.vpc_vpc_cidr : null
+  aws_account_id = var.mongodb_vpc_peering_enabled ? var.aws_account_id : null
+  vpc_id         = var.mongodb_vpc_peering_enabled ? module.vpc.vpc_id : null
+  aws_region     = var.mongodb_vpc_peering_enabled ? var.aws_region : null
 }
