@@ -4,15 +4,10 @@ variable "create_organization" {
   default     = true
 }
 
-variable "project_name" {
-  description = "Name of the MongoDB Atlas project"
-  type        = string
-}
-
 variable "organization_name" {
   description = "Name of the MongoDB Atlas organization (required if create_organization is true)"
   type        = string
-  default     = null
+  default     = "terraform-fargate-mongodb-organization"
 
   validation {
     condition     = var.create_organization == false || (var.create_organization == true && var.organization_name != null && var.organization_name != "")
@@ -31,9 +26,16 @@ variable "org_id" {
   }
 }
 
+variable "project_name" {
+  description = "Name of the MongoDB Atlas project"
+  type        = string
+  default     = "terraform-fargate-mongodb-project"
+}
+
 variable "cluster_name" {
   description = "Name of the MongoDB Atlas cluster"
   type        = string
+  default     = "terraform-fargate-mongodb-cluster"
 }
 
 variable "provider_region" {
