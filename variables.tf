@@ -259,6 +259,12 @@ variable "mongodb_organization_name" {
   default     = "terraform-fargate-mongodb-organization"
 }
 
+variable "mongodb_org_owner_id" {
+  description = "MongoDB Atlas organization owner ID (required if mongodb_create_organization is true)"
+  type        = string
+  default     = null
+}
+
 variable "mongodb_org_id" {
   description = "MongoDB Atlas organization ID (required if mongodb_create_organization is false)"
   type        = string
