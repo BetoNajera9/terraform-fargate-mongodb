@@ -15,6 +15,17 @@ variable "organization_name" {
   }
 }
 
+variable "org_owner_id" {
+  description = "MongoDB Atlas organization owner ID (required if create_organization is true)"
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.create_organization == false || (var.create_organization == true && var.org_owner_id != null && var.org_owner_id != "")
+    error_message = "org_owner_id is required when create_organization is true."
+  }
+}
+
 variable "org_id" {
   description = "MongoDB Atlas organization ID (required if create_organization is false)"
   type        = string
