@@ -144,6 +144,7 @@ module "mongodb" {
   # Organization configuration
   create_organization = var.mongodb_create_organization
   organization_name   = var.mongodb_organization_name
+  org_owner_id        = var.mongodb_org_owner_id
   org_id              = var.mongodb_org_id
 
   # Project and cluster configuration
