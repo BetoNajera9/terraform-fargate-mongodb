@@ -2,8 +2,9 @@
 resource "mongodbatlas_organization" "terraform-fargate-mongodb-organization" {
   count = var.create_organization ? 1 : 0
 
-  name        = var.organization_name
-  description = "Organization created by Terraform for ${var.project_name}"
+  name         = var.organization_name
+  org_owner_id = var.org_owner_id
+  description  = "Organization created by Terraform for ${var.project_name}"
 }
 
 # Local value to determine the organization ID to use
