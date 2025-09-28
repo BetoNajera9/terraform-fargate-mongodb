@@ -49,14 +49,39 @@ variable "cluster_name" {
   default     = "terraform-fargate-mongodb-cluster"
 }
 
+variable "provider_type" {
+  description = "Type of the MongoDB Atlas cluster"
+  type        = string
+  default     = "REPLICASET"
+
+  validation {
+    condition     = contains(["REPLICASET", "SHARED", "GEOSHARDED"], var.provider_name)
+    error_message = "Provider name must be one of: REPLICASET, SHARED, GEOSHARDED"
+  }
+}
+
 variable "provider_name" {
   description = "Cloud provider for the MongoDB Atlas cluster (AWS, GCP, AZURE)"
   type        = string
   default     = "TENANT"
 
   validation {
-    condition     = contains(["AWS", "GCP", "AZURE", "TENANT"], var.provider_name)
+    condition     = contains(["AWS", "GCP", "AZURE", "TENANT", "FLEX"], var.provider_name)
     error_message = "Provider name must be one of: AWS, GCP, AZURE, TENANT"
+  }
+}
+
+variable "backing_provider_name" {
+  description = "Cloud provider for the MongoDB Atlas cluster (AWS, GCP, AZURE) - Only used when provider_name is TENANT or FLEX"
+  type        = string
+  default     = "AWS"
+
+  validation {
+    condition = (
+      ((var.provider_name == "TENANT" || var.provider_name == "FLEX") && contains(["AWS", "GCP", "AZURE"], var.backing_provider_name)) ||
+      (var.provider_name == contains(["AWS", "GCP", "AZURE"], var.backing_provider_name) && var.backing_provider_name == null)
+    )
+    error_message = "When provider_name is TENANT, backing_provider_name must be one of: AWS, GCP, AZURE. When provider_name is AWS, GCP, or AZURE, backing_provider_name must be null."
   }
 }
 
@@ -66,34 +91,10 @@ variable "provider_region" {
   default     = "US_EAST_1"
 }
 
-variable "provider_instance_size_name" {
-  description = "Instance size for the MongoDB Atlas cluster (M0 = Free, M2/M5 = Shared, M10+ = Dedicated)"
+variable "instance_size" {
+  description = "Instance size for the MongoDB Atlas cluster"
   type        = string
   default     = "M0"
-}
-
-variable "mongodb_major_version" {
-  description = "MongoDB version"
-  type        = string
-  default     = "7.0"
-}
-
-variable "auto_scaling_disk_gb_enabled" {
-  description = "Enable auto scaling for disk space (only available for M10+ clusters)"
-  type        = bool
-  default     = false
-}
-
-variable "pit_enabled" {
-  description = "Enable Point in Time Recovery (only available for M10+ clusters)"
-  type        = bool
-  default     = false
-}
-
-variable "backup_enabled" {
-  description = "Enable backup for the cluster (only available for M10+ clusters)"
-  type        = bool
-  default     = false
 }
 
 variable "database_username" {
