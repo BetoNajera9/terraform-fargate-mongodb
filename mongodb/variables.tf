@@ -98,6 +98,17 @@ variable "instance_size" {
   default     = "M0"
 }
 
+variable "node_count" {
+  description = "Number of nodes in the replica set (3 for replica set, 1 for single node)"
+  type        = number
+  default     = 3
+
+  validation {
+    condition     = var.node_count >= 1 && var.node_count <= 50
+    error_message = "Node count must be between 1 and 50."
+  }
+}
+
 variable "database_username" {
   description = "Username for the database user"
   type        = string
