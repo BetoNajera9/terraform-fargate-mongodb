@@ -283,6 +283,12 @@ variable "mongodb_cluster_name" {
   default     = "terraform-fargate-mongodb-cluster"
 }
 
+variable "mongodb_provider_name" {
+  description = "Cloud provider for the MongoDB Atlas cluster (AWS, GCP, AZURE)"
+  type        = string
+  default     = "TENANT"
+}
+
 variable "mongodb_provider_region" {
   description = "Region for the MongoDB Atlas cluster"
   type        = string
