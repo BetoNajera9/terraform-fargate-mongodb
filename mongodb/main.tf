@@ -87,15 +87,14 @@ resource "mongodbatlas_project_ip_access_list" "main" {
 resource "mongodbatlas_network_peering" "main" {
   count = var.vpc_cidr_block != null ? 1 : 0
 
-  project_id             = mongodbatlas_project.terraform-fargate-mongodb-project.id
-  container_id           = mongodbatlas_network_container.main.container_id
+  project_id   = mongodbatlas_project.terraform-fargate-mongodb-project.id
+  container_id = one(values(mongodbatlas_advanced_cluster.terraform-fargate-mongodb-cluster.container_id))
+
   accepter_region_name   = var.aws_region
   provider_name          = "AWS"
   route_table_cidr_block = var.vpc_cidr_block
   vpc_id                 = var.vpc_id
   aws_account_id         = var.aws_account_id
-
-  depends_on = [mongodbatlas_network_container.main]
 }
 
 resource "mongodbatlas_network_container" "main" {
