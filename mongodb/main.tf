@@ -27,6 +27,13 @@ resource "mongodbatlas_project" "terraform-fargate-mongodb-project" {
   depends_on = [mongodbatlas_organization.terraform-fargate-mongodb-organization]
 }
 
+# Local values for intelligent configuration
+locals {
+  # M0, M2, M5 clusters only support 1 node (shared/free tier limitations)
+  # M10+ clusters support 3+ nodes for replica sets
+  actual_node_count = contains(["M0", "M2", "M5"], var.instance_size) ? 1 : var.node_count
+}
+
 # Create MongoDB Atlas Cluster
 resource "mongodbatlas_advanced_cluster" "terraform-fargate-mongodb-cluster" {
   project_id   = mongodbatlas_project.terraform-fargate-mongodb-project.id
@@ -39,6 +46,7 @@ resource "mongodbatlas_advanced_cluster" "terraform-fargate-mongodb-cluster" {
         {
           electable_specs = {
             instance_size = var.instance_size
+            node_count    = local.actual_node_count
           }
           provider_name         = var.provider_name
           backing_provider_name = var.backing_provider_name
