@@ -78,17 +78,18 @@ variable "backing_provider_name" {
 
   validation {
     condition = (
-      ((var.provider_name == "TENANT" || var.provider_name == "FLEX") && contains(["AWS", "GCP", "AZURE"], var.backing_provider_name)) ||
-      (var.provider_name == contains(["AWS", "GCP", "AZURE"], var.backing_provider_name) && var.backing_provider_name == null)
+      (var.provider_name == "TENANT" || var.provider_name == "FLEX") && contains(["AWS", "GCP", "AZURE"], var.backing_provider_name)
+      ) || (
+      contains(["AWS", "GCP", "AZURE"], var.provider_name)
     )
-    error_message = "When provider_name is TENANT, backing_provider_name must be one of: AWS, GCP, AZURE. When provider_name is AWS, GCP, or AZURE, backing_provider_name must be null."
+    error_message = "When provider_name is TENANT or FLEX, backing_provider_name must be one of: AWS, GCP, AZURE. When provider_name is AWS, GCP, or AZURE, backing_provider_name is used as provider_name."
   }
 }
 
 variable "provider_region" {
   description = "Region for the MongoDB Atlas cluster"
   type        = string
-  default     = "US_EAST_1"
+  default     = "US_WEST_1"
 }
 
 variable "instance_size" {
@@ -112,7 +113,7 @@ variable "database_password" {
 variable "database_name" {
   description = "Name of the database"
   type        = string
-  default     = "myapp"
+  default     = "terraform-fargate-mongodb-db"
 }
 
 variable "ip_access_list" {
@@ -121,29 +122,58 @@ variable "ip_access_list" {
     ip_address = string
     comment    = string
   }))
-  default = []
+  default = [
+    {
+      ip_address = "0.0.0.0/0"
+      comment    = "Allow all IPs - Update this for production with specific CIDR blocks"
+    }
+  ]
+
+  validation {
+    condition     = length(var.ip_access_list) > 0
+    error_message = "At least one IP address or CIDR block must be specified in ip_access_list."
+  }
 }
 
+# Refused from VPC module
 variable "vpc_cidr_block" {
-  description = "CIDR block for VPC peering (if using private networking)"
-  type        = string
-  default     = null
-}
-
-variable "aws_account_id" {
-  description = "AWS Account ID for VPC peering"
+  description = "VPC CIDR block for peering connection (from VPC module)"
   type        = string
   default     = null
 }
 
 variable "vpc_id" {
-  description = "VPC ID for peering connection"
+  description = "VPC ID for peering connection (from VPC module)"
+  type        = string
+  default     = null
+}
+
+variable "vpc_route_table_ids" {
+  description = "List of VPC route table IDs to add routes for MongoDB Atlas peering"
+  type        = list(string)
+  default     = null
+}
+
+# Refuased from AWS module
+variable "aws_account_id" {
+  description = "AWS Account ID for VPC peering (from AWS data source)"
   type        = string
   default     = null
 }
 
 variable "aws_region" {
-  description = "AWS region for VPC peering"
+  description = "AWS region for VPC peering (from AWS provider)"
   type        = string
   default     = null
+}
+
+variable "atlas_cidr_block" {
+  description = "MongoDB Atlas network container CIDR block (must not overlap with VPC CIDR)"
+  type        = string
+  default     = "10.100.0.0/16"
+
+  validation {
+    condition     = can(cidrhost(var.atlas_cidr_block, 0))
+    error_message = "The atlas_cidr_block must be a valid CIDR block."
+  }
 }

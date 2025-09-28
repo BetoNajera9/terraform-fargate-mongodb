@@ -301,12 +301,6 @@ variable "mongodb_backing_provider_name" {
   default     = "AWS"
 }
 
-variable "mongodb_provider_region" {
-  description = "Region for the MongoDB Atlas cluster"
-  type        = string
-  default     = "US_EAST_1"
-}
-
 variable "mongodb_instance_size" {
   description = "Instance size for the MongoDB Atlas cluster (M0 = Free, M2/M5 = Shared, M10+ = Dedicated)"
   type        = string
@@ -332,7 +326,7 @@ variable "mongodb_database_name" {
 }
 
 variable "mongodb_ip_access_list" {
-  description = "List of IP addresses or CIDR blocks allowed to access the cluster"
+  description = "List of IP addresses or CIDR blocks allowed to access the cluster. When VPC peering is enabled, consider using your VPC CIDR block (e.g., 10.0.0.0/16) instead of 0.0.0.0/0 for better security."
   type = list(object({
     ip_address = string
     comment    = string
@@ -340,13 +334,29 @@ variable "mongodb_ip_access_list" {
   default = [
     {
       ip_address = "0.0.0.0/0"
-      comment    = "Allow all IPs - Change this for production"
+      comment    = "Allow all IPs - CHANGE THIS: Use your VPC CIDR (e.g., 10.0.0.0/16) for production"
     }
   ]
+
+  validation {
+    condition     = length(var.mongodb_ip_access_list) > 0
+    error_message = "At least one IP address or CIDR block must be specified in ip_access_list."
+  }
 }
 
 variable "mongodb_vpc_peering_enabled" {
   description = "Enable VPC peering between AWS VPC and MongoDB Atlas for private connectivity"
   type        = bool
-  default     = false
+  default     = true
+}
+
+variable "mongodb_atlas_cidr_block" {
+  description = "CIDR block for MongoDB Atlas network container (must not overlap with VPC CIDR)"
+  type        = string
+  default     = "192.168.248.0/21"
+
+  validation {
+    condition     = can(cidrhost(var.mongodb_atlas_cidr_block, 0))
+    error_message = "The mongodb_atlas_cidr_block must be a valid CIDR block."
+  }
 }
