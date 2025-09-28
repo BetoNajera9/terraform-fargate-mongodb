@@ -40,9 +40,6 @@ resource "mongodbatlas_advanced_cluster" "terraform-fargate-mongodb-cluster" {
           electable_specs = {
             instance_size = var.instance_size
           }
-          analytics_specs = {
-            instance_size = var.instance_size
-          }
           provider_name         = var.provider_name
           backing_provider_name = var.backing_provider_name
           region_name           = var.provider_region
@@ -51,8 +48,6 @@ resource "mongodbatlas_advanced_cluster" "terraform-fargate-mongodb-cluster" {
       ]
     }
   ]
-
-  depends_on = [mongodbatlas_project.terraform-fargate-mongodb-project]
 }
 
 # Create database user

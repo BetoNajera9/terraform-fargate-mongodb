@@ -298,7 +298,7 @@ variable "mongodb_provider_name" {
 variable "mongodb_backing_provider_name" {
   description = "Cloud provider for the MongoDB Atlas cluster (AWS, GCP, AZURE) - Only used when provider_name is TENANT or FLEX"
   type        = string
-  default     = "TENANT"
+  default     = "AWS"
 }
 
 variable "mongodb_provider_region" {
