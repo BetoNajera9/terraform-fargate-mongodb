@@ -88,7 +88,7 @@ resource "mongodbatlas_network_peering" "main" {
   count = var.vpc_cidr_block != null && var.aws_account_id != null && var.vpc_id != null ? 1 : 0
 
   project_id             = mongodbatlas_project.terraform-fargate-mongodb-project.id
-  container_id           = mongodbatlas_cluster.terraform-fargate-mongodb-cluster.container_id
+  container_id           = mongodbatlas_network_container.main.container_id
   accepter_region_name   = var.aws_region
   provider_name          = "AWS"
   route_table_cidr_block = var.vpc_cidr_block

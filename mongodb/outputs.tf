@@ -31,13 +31,13 @@ output "connection_strings" {
 
 output "mongo_uri" {
   description = "MongoDB URI for application connection"
-  value       = mongodbatlas_advanced_cluster.terraform-fargate-mongodb-cluster.connection_strings[0].standard
+  value       = mongodbatlas_advanced_cluster.terraform-fargate-mongodb-cluster.connection_strings.standard
   sensitive   = true
 }
 
 output "mongo_uri_srv" {
   description = "MongoDB SRV URI for application connection"
-  value       = mongodbatlas_advanced_cluster.terraform-fargate-mongodb-cluster.connection_strings[0].standard_srv
+  value       = mongodbatlas_advanced_cluster.terraform-fargate-mongodb-cluster.connection_strings.standard_srv
   sensitive   = true
 }
 
@@ -54,11 +54,6 @@ output "database_name" {
 output "cluster_state" {
   description = "Current state of the cluster"
   value       = mongodbatlas_advanced_cluster.terraform-fargate-mongodb-cluster.state_name
-}
-
-output "srv_address" {
-  description = "SRV address for the cluster"
-  value       = mongodbatlas_advanced_cluster.terraform-fargate-mongodb-cluster.srv_address
 }
 
 output "mongo_db_version" {
