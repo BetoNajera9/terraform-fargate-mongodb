@@ -95,7 +95,7 @@ resource "mongodbatlas_network_peering" "main" {
   vpc_id                 = var.vpc_id
   aws_account_id         = var.aws_account_id
 
-  depends_on = [mongodbatlas_advanced_cluster.terraform-fargate-mongodb-cluster]
+  depends_on = [mongodbatlas_network_container.main.container_id]
 }
 
 resource "mongodbatlas_network_container" "main" {
