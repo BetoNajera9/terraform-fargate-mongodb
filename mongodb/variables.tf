@@ -49,6 +49,17 @@ variable "cluster_name" {
   default     = "terraform-fargate-mongodb-cluster"
 }
 
+variable "provider_name" {
+  description = "Cloud provider for the MongoDB Atlas cluster (AWS, GCP, AZURE)"
+  type        = string
+  default     = "TENANT"
+
+  validation {
+    condition     = contains(["AWS", "GCP", "AZURE", "TENANT"], var.provider_name)
+    error_message = "Provider name must be one of: AWS, GCP, AZURE, TENANT"
+  }
+}
+
 variable "provider_region" {
   description = "Region for the MongoDB Atlas cluster"
   type        = string

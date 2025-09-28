@@ -150,6 +150,7 @@ module "mongodb" {
   # Project and cluster configuration
   project_name                = var.mongodb_project_name
   cluster_name                = var.mongodb_cluster_name
+  provider_name               = var.mongodb_provider_name
   provider_region             = var.mongodb_provider_region
   provider_instance_size_name = var.mongodb_provider_instance_size_name
   mongodb_major_version       = var.mongodb_major_version

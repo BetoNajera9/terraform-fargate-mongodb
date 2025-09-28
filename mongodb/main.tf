@@ -33,7 +33,7 @@ resource "mongodbatlas_cluster" "terraform-fargate-mongodb-cluster" {
   name       = var.cluster_name
 
   # Provider settings
-  provider_name               = "AWS"
+  provider_name               = var.provider_name
   provider_region_name        = var.provider_region
   provider_instance_size_name = var.provider_instance_size_name
 
