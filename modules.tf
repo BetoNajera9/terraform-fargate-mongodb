@@ -148,17 +148,13 @@ module "mongodb" {
   org_id              = var.mongodb_org_id
 
   # Project and cluster configuration
-  project_name                = var.mongodb_project_name
-  cluster_name                = var.mongodb_cluster_name
-  provider_name               = var.mongodb_provider_name
-  provider_region             = var.mongodb_provider_region
-  provider_instance_size_name = var.mongodb_provider_instance_size_name
-  mongodb_major_version       = var.mongodb_major_version
-
-  # Features configuration
-  auto_scaling_disk_gb_enabled = var.mongodb_auto_scaling_disk_gb_enabled
-  pit_enabled                  = var.mongodb_pit_enabled
-  backup_enabled               = var.mongodb_backup_enabled
+  project_name          = var.mongodb_project_name
+  cluster_name          = var.mongodb_cluster_name
+  provider_type         = var.mongodb_provider_type
+  provider_name         = var.mongodb_provider_name
+  backing_provider_name = var.mongodb_backing_provider_name
+  provider_region       = var.mongodb_provider_region
+  instance_size         = var.mongodb_instance_size
 
   # Database user configuration
   database_username = var.mongodb_database_username

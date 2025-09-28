@@ -283,8 +283,20 @@ variable "mongodb_cluster_name" {
   default     = "terraform-fargate-mongodb-cluster"
 }
 
+variable "mongodb_provider_type" {
+  description = "Type of the MongoDB Atlas cluster"
+  type        = string
+  default     = "REPLICASET"
+}
+
 variable "mongodb_provider_name" {
   description = "Cloud provider for the MongoDB Atlas cluster (AWS, GCP, AZURE)"
+  type        = string
+  default     = "TENANT"
+}
+
+variable "mongodb_backing_provider_name" {
+  description = "Cloud provider for the MongoDB Atlas cluster (AWS, GCP, AZURE) - Only used when provider_name is TENANT or FLEX"
   type        = string
   default     = "TENANT"
 }
@@ -295,34 +307,10 @@ variable "mongodb_provider_region" {
   default     = "US_EAST_1"
 }
 
-variable "mongodb_provider_instance_size_name" {
+variable "mongodb_instance_size" {
   description = "Instance size for the MongoDB Atlas cluster (M0 = Free, M2/M5 = Shared, M10+ = Dedicated)"
   type        = string
   default     = "M0"
-}
-
-variable "mongodb_major_version" {
-  description = "MongoDB version"
-  type        = string
-  default     = "7.0"
-}
-
-variable "mongodb_auto_scaling_disk_gb_enabled" {
-  description = "Enable auto scaling for disk space (only available for M10+ clusters)"
-  type        = bool
-  default     = false
-}
-
-variable "mongodb_pit_enabled" {
-  description = "Enable Point in Time Recovery (only available for M10+ clusters)"
-  type        = bool
-  default     = false
-}
-
-variable "mongodb_backup_enabled" {
-  description = "Enable backup for the cluster (only available for M10+ clusters)"
-  type        = bool
-  default     = false
 }
 
 variable "mongodb_database_username" {
