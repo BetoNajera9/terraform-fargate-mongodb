@@ -55,8 +55,8 @@ variable "provider_type" {
   default     = "REPLICASET"
 
   validation {
-    condition     = contains(["REPLICASET", "SHARED", "GEOSHARDED"], var.provider_name)
-    error_message = "Provider name must be one of: REPLICASET, SHARED, GEOSHARDED"
+    condition     = contains(["REPLICASET", "SHARED", "GEOSHARDED"], var.provider_type)
+    error_message = "Provider type (${var.provider_type}) must be one of: REPLICASET, SHARED, GEOSHARDED"
   }
 }
 
@@ -67,7 +67,7 @@ variable "provider_name" {
 
   validation {
     condition     = contains(["AWS", "GCP", "AZURE", "TENANT", "FLEX"], var.provider_name)
-    error_message = "Provider name must be one of: AWS, GCP, AZURE, TENANT"
+    error_message = "Provider name (${var.provider_name}) must be one of: AWS, GCP, AZURE, TENANT"
   }
 }
 
