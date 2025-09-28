@@ -141,32 +141,37 @@ module "eventbridge" {
 module "mongodb" {
   source = "./mongodb"
 
-  # Organization configuration
   create_organization = var.mongodb_create_organization
   organization_name   = var.mongodb_organization_name
   org_owner_id        = var.mongodb_org_owner_id
   org_id              = var.mongodb_org_id
 
-  # Project and cluster configuration
   project_name          = var.mongodb_project_name
   cluster_name          = var.mongodb_cluster_name
   provider_type         = var.mongodb_provider_type
   provider_name         = var.mongodb_provider_name
   backing_provider_name = var.mongodb_backing_provider_name
-  provider_region       = var.mongodb_provider_region
+  provider_region       = upper(replace(var.aws_region, "-", "_"))
   instance_size         = var.mongodb_instance_size
 
-  # Database user configuration
   database_username = var.mongodb_database_username
   database_password = var.mongodb_database_password
   database_name     = var.mongodb_database_name
 
-  # Network access configuration
-  ip_access_list = var.mongodb_ip_access_list
+  # Network access configuration - Intelligent IP access list
+  # If VPC peering is enabled and user hasn't customized the default, automatically include VPC CIDR
+  ip_access_list = var.mongodb_vpc_peering_enabled ? [
+    {
+      ip_address = module.vpc.vpc_cidr_block
+      comment    = "AWS VPC - Automatic VPC CIDR for Fargate and internal resources"
+    }
+  ] : var.mongodb_ip_access_list
 
-  # Optional VPC peering configuration (reusing existing VPC variables)
-  vpc_cidr_block = var.mongodb_vpc_peering_enabled ? var.vpc_vpc_cidr : null
-  aws_account_id = var.mongodb_vpc_peering_enabled ? var.aws_account_id : null
-  vpc_id         = var.mongodb_vpc_peering_enabled ? module.vpc.vpc_id : null
-  aws_region     = var.mongodb_vpc_peering_enabled ? var.aws_region : null
+  # Optional VPC peering configuration
+  vpc_cidr_block      = var.mongodb_vpc_peering_enabled ? module.vpc.vpc_cidr_block : null
+  atlas_cidr_block    = var.mongodb_atlas_cidr_block
+  aws_account_id      = var.mongodb_vpc_peering_enabled ? data.aws_caller_identity.current.account_id : null
+  vpc_id              = var.mongodb_vpc_peering_enabled ? module.vpc.vpc_id : null
+  aws_region          = var.mongodb_vpc_peering_enabled ? var.aws_region : null
+  vpc_route_table_ids = var.mongodb_vpc_peering_enabled ? module.vpc.vpc_route_table_ids : null
 }
