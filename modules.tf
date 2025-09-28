@@ -153,6 +153,7 @@ module "mongodb" {
   backing_provider_name = var.mongodb_backing_provider_name
   provider_region       = upper(replace(var.aws_region, "-", "_"))
   instance_size         = var.mongodb_instance_size
+  node_count            = var.mongodb_node_count
 
   database_username = var.mongodb_database_username
   database_password = var.mongodb_database_password

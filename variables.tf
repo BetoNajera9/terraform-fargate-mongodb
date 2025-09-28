@@ -307,6 +307,12 @@ variable "mongodb_instance_size" {
   default     = "M0"
 }
 
+variable "mongodb_node_count" {
+  description = "Number of nodes in the MongoDB Atlas replica set (NOTE: M0/M2/M5 clusters only support 1 node, M10+ support 3+ nodes)"
+  type        = number
+  default     = 3
+}
+
 variable "mongodb_database_username" {
   description = "Username for the database user"
   type        = string
