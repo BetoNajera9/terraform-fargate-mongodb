@@ -30,19 +30,19 @@ resource "mongodbatlas_project" "terraform-fargate-mongodb-project" {
 # Create MongoDB Atlas Cluster
 resource "mongodbatlas_advanced_cluster" "terraform-fargate-mongodb-cluster" {
   project_id   = mongodbatlas_project.terraform-fargate-mongodb-project.id
-  name         = "NAME OF CLUSTER"
-  cluster_type = "REPLICASET"
+  name         = var.cluster_name
+  cluster_type = var.provider_type
 
   replication_specs = [
     {
       region_configs = [
         {
           electable_specs = {
-            instance_size = "M0"
+            instance_size = var.instance_size
           }
-          provider_name         = "TENANT"
-          backing_provider_name = "AWS"
-          region_name           = "US_EAST_1"
+          provider_name         = var.provider_name
+          backing_provider_name = var.backing_provider_name
+          region_name           = var.provider_region
           priority              = 7
         }
       ]
