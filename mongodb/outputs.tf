@@ -15,29 +15,29 @@ output "project_id" {
 
 output "cluster_id" {
   description = "MongoDB Atlas cluster ID"
-  value       = mongodbatlas_cluster.terraform-fargate-mongodb-cluster.cluster_id
+  value       = mongodbatlas_advanced_cluster.terraform-fargate-mongodb-cluster.cluster_id
 }
 
 output "cluster_name" {
   description = "MongoDB Atlas cluster name"
-  value       = mongodbatlas_cluster.terraform-fargate-mongodb-cluster.name
+  value       = mongodbatlas_advanced_cluster.terraform-fargate-mongodb-cluster.name
 }
 
 output "connection_strings" {
   description = "MongoDB connection strings"
-  value       = mongodbatlas_cluster.terraform-fargate-mongodb-cluster.connection_strings
+  value       = mongodbatlas_advanced_cluster.terraform-fargate-mongodb-cluster.connection_strings
   sensitive   = true
 }
 
 output "mongo_uri" {
   description = "MongoDB URI for application connection"
-  value       = mongodbatlas_cluster.terraform-fargate-mongodb-cluster.connection_strings[0].standard
+  value       = mongodbatlas_advanced_cluster.terraform-fargate-mongodb-cluster.connection_strings[0].standard
   sensitive   = true
 }
 
 output "mongo_uri_srv" {
   description = "MongoDB SRV URI for application connection"
-  value       = mongodbatlas_cluster.terraform-fargate-mongodb-cluster.connection_strings[0].standard_srv
+  value       = mongodbatlas_advanced_cluster.terraform-fargate-mongodb-cluster.connection_strings[0].standard_srv
   sensitive   = true
 }
 
@@ -53,17 +53,17 @@ output "database_name" {
 
 output "cluster_state" {
   description = "Current state of the cluster"
-  value       = mongodbatlas_cluster.terraform-fargate-mongodb-cluster.state_name
+  value       = mongodbatlas_advanced_cluster.terraform-fargate-mongodb-cluster.state_name
 }
 
 output "srv_address" {
   description = "SRV address for the cluster"
-  value       = mongodbatlas_cluster.terraform-fargate-mongodb-cluster.srv_address
+  value       = mongodbatlas_advanced_cluster.terraform-fargate-mongodb-cluster.srv_address
 }
 
 output "mongo_db_version" {
   description = "MongoDB version"
-  value       = mongodbatlas_cluster.terraform-fargate-mongodb-cluster.mongo_db_version
+  value       = mongodbatlas_advanced_cluster.terraform-fargate-mongodb-cluster.mongo_db_version
 }
 
 output "peering_connection_id" {
