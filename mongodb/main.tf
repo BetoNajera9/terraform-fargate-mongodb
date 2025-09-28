@@ -72,7 +72,7 @@ resource "mongodbatlas_database_user" "database_user" {
     database_name = var.database_name
   }
 
-  depends_on = [mongodbatlas_cluster.terraform-fargate-mongodb-cluster]
+  depends_on = [mongodbatlas_advanced_cluster.terraform-fargate-mongodb-cluster]
 }
 
 resource "mongodbatlas_project_ip_access_list" "main" {
@@ -86,7 +86,7 @@ resource "mongodbatlas_project_ip_access_list" "main" {
 
   comment = var.ip_access_list[count.index].comment
 
-  depends_on = [mongodbatlas_cluster.terraform-fargate-mongodb-cluster]
+  depends_on = [mongodbatlas_advanced_cluster.terraform-fargate-mongodb-cluster]
 }
 
 resource "mongodbatlas_network_peering" "main" {
@@ -100,7 +100,7 @@ resource "mongodbatlas_network_peering" "main" {
   vpc_id                 = var.vpc_id
   aws_account_id         = var.aws_account_id
 
-  depends_on = [mongodbatlas_cluster.terraform-fargate-mongodb-cluster]
+  depends_on = [mongodbatlas_advanced_cluster.terraform-fargate-mongodb-cluster]
 }
 
 resource "mongodbatlas_network_container" "main" {
