@@ -84,26 +84,52 @@ resource "mongodbatlas_project_ip_access_list" "main" {
   depends_on = [mongodbatlas_advanced_cluster.terraform-fargate-mongodb-cluster]
 }
 
-resource "mongodbatlas_network_peering" "main" {
-  count = var.vpc_cidr_block != null ? 1 : 0
-
-  project_id   = mongodbatlas_project.terraform-fargate-mongodb-project.id
-  container_id = one(values(mongodbatlas_advanced_cluster.terraform-fargate-mongodb-cluster.container_id))
-
-  accepter_region_name   = var.aws_region
-  provider_name          = "AWS"
-  route_table_cidr_block = var.vpc_cidr_block
-  vpc_id                 = var.vpc_id
-  aws_account_id         = var.aws_account_id
-}
-
 resource "mongodbatlas_network_container" "main" {
   count = var.vpc_cidr_block != null ? 1 : 0
 
   project_id       = mongodbatlas_project.terraform-fargate-mongodb-project.id
-  atlas_cidr_block = "192.168.248.0/21"
-  provider_name    = "AWS"
+  atlas_cidr_block = var.atlas_cidr_block
+  provider_name    = var.provider_name == "TENANT" || var.provider_name == "FLEX" ? var.backing_provider_name : var.provider_name
   region_name      = var.provider_region
 
   depends_on = [mongodbatlas_project.terraform-fargate-mongodb-project]
+}
+
+resource "mongodbatlas_network_peering" "main" {
+  count = var.vpc_cidr_block != null ? 1 : 0
+
+  project_id   = mongodbatlas_project.terraform-fargate-mongodb-project.id
+  container_id = mongodbatlas_network_container.main[0].container_id
+
+  accepter_region_name   = var.aws_region
+  provider_name          = var.provider_name == "TENANT" || var.provider_name == "FLEX" ? var.backing_provider_name : var.provider_name
+  route_table_cidr_block = var.vpc_cidr_block
+  vpc_id                 = var.vpc_id
+  aws_account_id         = var.aws_account_id
+
+  depends_on = [mongodbatlas_network_container.main]
+}
+
+resource "aws_vpc_peering_connection_accepter" "main" {
+  count = var.vpc_cidr_block != null ? 1 : 0
+
+  vpc_peering_connection_id = mongodbatlas_network_peering.main[0].connection_id
+  auto_accept               = true
+
+  tags = {
+    Name = "VPC Peering with MongoDB Atlas"
+    Side = "Accepter"
+  }
+
+  depends_on = [mongodbatlas_network_peering.main]
+}
+
+resource "aws_route" "mongodb_atlas_routes" {
+  count = var.vpc_cidr_block != null && var.vpc_route_table_ids != null ? length(var.vpc_route_table_ids) : 0
+
+  route_table_id            = var.vpc_route_table_ids[count.index]
+  destination_cidr_block    = var.atlas_cidr_block
+  vpc_peering_connection_id = mongodbatlas_network_peering.main[0].connection_id
+
+  depends_on = [aws_vpc_peering_connection_accepter.main]
 }
