@@ -28,33 +28,29 @@ resource "mongodbatlas_project" "terraform-fargate-mongodb-project" {
 }
 
 # Create MongoDB Atlas Cluster
-resource "mongodbatlas_cluster" "terraform-fargate-mongodb-cluster" {
-  project_id = mongodbatlas_project.terraform-fargate-mongodb-project.id
-  name       = var.cluster_name
+resource "mongodbatlas_advanced_cluster" "terraform-fargate-mongodb-cluster" {
+  project_id   = mongodbatlas_project.terraform-fargate-mongodb-project.id
+  name         = var.cluster_name
+  cluster_type = var.provider_type
 
-  # Provider settings
-  provider_name               = var.provider_name
-  provider_region_name        = var.provider_region
-  provider_instance_size_name = var.provider_instance_size_name
-
-  # Cluster configuration
-  cluster_type           = "REPLICASET"
-  mongo_db_major_version = var.mongodb_major_version
-
-  # Auto scaling and backup
-  auto_scaling_disk_gb_enabled = var.auto_scaling_disk_gb_enabled
-  pit_enabled                  = var.pit_enabled
-  backup_enabled               = var.backup_enabled
-
-  # Advanced configuration
-  advanced_configuration {
-    javascript_enabled                   = true
-    minimum_enabled_tls_protocol         = "TLS1_2"
-    no_table_scan                        = false
-    oplog_size_mb                        = 2048
-    sample_size_bi_connector             = 5000
-    sample_refresh_interval_bi_connector = 300
-  }
+  replication_specs = [
+    {
+      region_configs = [
+        {
+          electable_specs = {
+            instance_size = var.instance_size
+          }
+          analytics_specs = {
+            instance_size = var.instance_size
+          }
+          provider_name         = var.provider_name
+          backing_provider_name = var.backing_provider_name
+          region_name           = var.provider_region
+          priority              = 7
+        }
+      ]
+    }
+  ]
 
   depends_on = [mongodbatlas_project.terraform-fargate-mongodb-project]
 }
