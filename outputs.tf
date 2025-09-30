@@ -45,11 +45,6 @@ output "ecs_cluster_id" {
   value       = module.ecs.cluster_id
 }
 
-output "ecs_cluster_arn" {
-  description = "ARN of the ECS cluster"
-  value       = module.ecs.cluster_arn
-}
-
 output "ecs_service_name" {
   description = "Name of the ECS service"
   value       = module.ecs.service_name
@@ -117,18 +112,18 @@ output "mongodb_database_name" {
 # === Lambda Information ===
 output "auto_deploy_lambda_arn" {
   description = "ARN of the auto-deployment Lambda function"
-  value       = module.lambda.lambda_arn
+  value       = module.lambda.lambda_function_arn
 }
 
 output "auto_deploy_lambda_name" {
   description = "Name of the auto-deployment Lambda function"
-  value       = module.lambda.lambda_name
+  value       = module.lambda.lambda_function_name
 }
 
 # === EventBridge Information ===
 output "eventbridge_rule_arn" {
   description = "ARN of the EventBridge rule for auto-deployment"
-  value       = module.eventbridge.rule_arn
+  value       = module.eventbridge.event_bridge_rule_arn
 }
 
 # === Application URLs ===
