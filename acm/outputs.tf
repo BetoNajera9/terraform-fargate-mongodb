@@ -1,6 +1,6 @@
 output "acm_certificate_arn" {
   description = "The ARN of the SSL certificate"
-  value       = aws_acm_certificate_validation.ssl_validation.certificate_arn
+  value       = var.wait_for_validation ? aws_acm_certificate_validation.ssl_validation[0].certificate_arn : aws_acm_certificate.ssl_certificate.arn
 }
 
 output "acm_certificate_domain_name" {

@@ -21,7 +21,7 @@ module "alb" {
   vpc_main_vpc_id       = module.vpc.vpc_id
   vpc_public_subnets_id = module.vpc.vpc_public_subnets_id
 
-  acm_ssl_certificate_arn = module.acm.acm_certificate_arn
+  acm_ssl_certificate_arn = var.enable_custom_domain ? module.acm[0].acm_certificate_arn : null
   depends_on              = [module.acm]
 }
 
@@ -89,6 +89,7 @@ module "ecr" {
 }
 
 module "route53" {
+  count  = var.enable_custom_domain ? 1 : 0
   source = "./route53"
 
   domain_name    = var.route53_domain_name
@@ -99,13 +100,15 @@ module "route53" {
 }
 
 module "acm" {
+  count  = var.enable_custom_domain ? 1 : 0
   source = "./acm"
 
   domain_name               = var.route53_subdomain_name
   subject_alternative_names = var.acm_subject_alternative_names
-  validation_timeout        = var.acm_validation_timeout
+  validation_timeout        = var.alb_ssl_validation_timeout
+  wait_for_validation       = var.alb_ssl_wait_for_validation
 
-  route53_hosted_zone_id = module.route53.route53_hosted_zone_id
+  route53_hosted_zone_id = module.route53[0].route53_hosted_zone_id
 }
 
 module "lambda" {
