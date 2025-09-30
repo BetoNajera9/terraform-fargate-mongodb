@@ -53,6 +53,12 @@ variable "acm_ssl_certificate_arn" {
   default     = null
 }
 
+variable "enable_https_listener" {
+  description = "Whether to create HTTPS listener (requires SSL certificate)"
+  type        = bool
+  default     = false
+}
+
 # Reused from VPC module
 variable "vpc_main_vpc_id" {
   description = "The ID of the main VPC"

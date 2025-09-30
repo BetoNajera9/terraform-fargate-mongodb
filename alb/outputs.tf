@@ -25,7 +25,7 @@ output "alb_listener_http_arn" {
 
 output "alb_listener_https_arn" {
   description = "ARN del listener HTTPS del ALB"
-  value       = aws_lb_listener.app_listener_http.arn
+  value       = var.enable_https_listener ? aws_lb_listener.app_listener_https[0].arn : null
 }
 
 output "alb_target_group_arn" {
