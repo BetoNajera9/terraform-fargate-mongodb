@@ -80,6 +80,19 @@ variable "alb_listener_protocol" {
   default     = "HTTP"
 }
 
+# SSL/Certificate Configuration for ALB
+variable "alb_ssl_validation_timeout" {
+  description = "Timeout for ACM certificate validation"
+  type        = string
+  default     = "10m"
+}
+
+variable "alb_ssl_wait_for_validation" {
+  description = "Whether to wait for ACM certificate validation to complete. Set to false to avoid timeout errors when nameservers are not properly configured."
+  type        = bool
+  default     = false
+}
+
 # IAM Variables
 variable "iam_ecs_task_execution_role_name" {
   description = "Nombre del rol de ejecución de ECS"
@@ -155,26 +168,39 @@ variable "ecs_desired_count" {
 }
 
 # Route 53 Variables
+variable "enable_custom_domain" {
+  description = "Enable custom domain configuration with Route53 and ACM. Set to false to disable domain and SSL setup."
+  type        = bool
+  default     = true
+}
+
 variable "route53_domain_name" {
-  description = "The domain name for the hosted zone"
+  description = "The domain name for the hosted zone (required if enable_custom_domain is true)"
   type        = string
+  default     = null
+
+  validation {
+    condition     = var.enable_custom_domain == false || (var.enable_custom_domain == true && var.route53_domain_name != null)
+    error_message = "route53_domain_name is required when enable_custom_domain is true."
+  }
 }
 
 variable "route53_subdomain_name" {
-  description = "The subdomain name to create"
+  description = "The subdomain name to create (required if enable_custom_domain is true)"
   type        = string
+  default     = null
+
+  validation {
+    condition     = var.enable_custom_domain == false || (var.enable_custom_domain == true && var.route53_subdomain_name != null)
+    error_message = "route53_subdomain_name is required when enable_custom_domain is true."
+  }
 }
 
 # ACM (SSL Certificate) Variables
 variable "acm_subject_alternative_names" {
-  description = "Additional domains to include in the SSL certificate"
+  description = "Additional domains to include in the SSL certificate (only used if enable_custom_domain is true)"
   type        = list(string)
-}
-
-variable "acm_validation_timeout" {
-  description = "Timeout for ACM certificate validation"
-  type        = string
-  default     = "10m"
+  default     = []
 }
 
 # ECR Variables
