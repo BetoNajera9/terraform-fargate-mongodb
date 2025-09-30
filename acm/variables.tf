@@ -14,6 +14,12 @@ variable "validation_timeout" {
   default     = "10m"
 }
 
+variable "wait_for_validation" {
+  description = "Whether to wait for the certificate validation to complete. Set to false to avoid timeout errors when nameservers are not properly configured."
+  type        = bool
+  default     = true
+}
+
 # Refused from Route 53 module
 variable "route53_hosted_zone_id" {
   description = "The Route53 hosted zone ID for DNS validation"

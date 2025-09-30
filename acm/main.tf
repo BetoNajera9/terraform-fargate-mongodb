@@ -32,8 +32,10 @@ resource "aws_route53_record" "cert_validation" {
   zone_id         = var.route53_hosted_zone_id
 }
 
-# Esperar a que la validación DNS se complete
+# Esperar a que la validación DNS se complete (solo si wait_for_validation es true)
 resource "aws_acm_certificate_validation" "ssl_validation" {
+  count = var.wait_for_validation ? 1 : 0
+
   certificate_arn         = aws_acm_certificate.ssl_certificate.arn
   validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
 
