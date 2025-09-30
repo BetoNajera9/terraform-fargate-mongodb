@@ -22,6 +22,7 @@ module "alb" {
   vpc_public_subnets_id = module.vpc.vpc_public_subnets_id
 
   acm_ssl_certificate_arn = var.enable_custom_domain ? module.acm[0].acm_certificate_arn : null
+  enable_https_listener   = var.enable_custom_domain
   depends_on              = [module.acm]
 }
 
