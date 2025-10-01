@@ -80,6 +80,12 @@ variable "alb_listener_protocol" {
   default     = "HTTP"
 }
 
+variable "alb_enable_https_listener" {
+  description = "Enable HTTPS listener for the ALB"
+  type        = bool
+  default     = false
+}
+
 # SSL/Certificate Configuration for ALB
 variable "alb_ssl_validation_timeout" {
   description = "Timeout for ACM certificate validation"
@@ -165,6 +171,12 @@ variable "ecs_desired_count" {
   description = "The number of instances of the task definition to place and keep running in your service"
   type        = number
   default     = 1
+}
+
+variable "ecs_sg_name" {
+  description = "The name of the security group for ECS tasks"
+  type        = string
+  default     = "ecs-sg"
 }
 
 # Route 53 Variables

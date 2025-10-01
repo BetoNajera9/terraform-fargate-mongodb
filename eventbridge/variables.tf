@@ -1,13 +1,11 @@
 variable "rule_name" {
   description = "Name of the EventBridge rule"
   type        = string
-  default     = "ecr-when-push-rule"
 }
 
 variable "state" {
   description = "State of the rule (ENABLED or DISABLED)"
   type        = string
-  default     = "ENABLED"
 
   validation {
     condition     = contains(["ENABLED", "DISABLED"], var.state)
