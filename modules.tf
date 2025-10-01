@@ -16,13 +16,12 @@ module "alb" {
   tg_protocol          = var.alb_tg_protocol
   tg_health_check_path = var.alb_tg_health_check_path
   listener_port        = var.alb_listener_port
-  listener_protocol    = var.alb_listener_protocol
 
   vpc_main_vpc_id       = module.vpc.vpc_id
   vpc_public_subnets_id = module.vpc.vpc_public_subnets_id
 
   acm_ssl_certificate_arn = var.enable_custom_domain ? module.acm[0].acm_certificate_arn : null
-  enable_https_listener   = var.enable_custom_domain
+  enable_https_listener   = var.alb_enable_https_listener
   depends_on              = [module.acm]
 }
 
@@ -43,6 +42,8 @@ module "ecs" {
   container_name  = var.ecs_container_name
   container_image = var.ecs_use_ecr ? "${module.ecr.ecr_repository_url}:${var.ecs_image_tag}" : var.ecs_container_image
   container_port  = var.ecs_container_port
+  desired_count   = var.ecs_desired_count
+  sg_name         = var.ecs_sg_name
 
   aws_region = var.aws_region
 

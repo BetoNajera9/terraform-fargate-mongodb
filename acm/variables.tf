@@ -11,13 +11,11 @@ variable "subject_alternative_names" {
 variable "validation_timeout" {
   description = "Timeout for certificate validation"
   type        = string
-  default     = "10m"
 }
 
 variable "wait_for_validation" {
   description = "Whether to wait for the certificate validation to complete. Set to false to avoid timeout errors when nameservers are not properly configured."
   type        = bool
-  default     = true
 }
 
 # Refused from Route 53 module
