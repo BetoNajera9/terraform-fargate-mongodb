@@ -397,7 +397,7 @@ variable "mongodb_vpc_peering_enabled" {
 variable "mongodb_atlas_cidr_block" {
   description = "CIDR block for MongoDB Atlas network container (must not overlap with VPC CIDR)"
   type        = string
-  default     = "192.168.248.0/21"
+  default     = "172.16.0.0/21"
 
   validation {
     condition     = can(cidrhost(var.mongodb_atlas_cidr_block, 0))
