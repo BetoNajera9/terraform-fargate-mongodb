@@ -69,14 +69,22 @@ resource "aws_lb_listener" "app_listener_http" {
   port              = "80"
   protocol          = "HTTP"
 
+  # Dynamic action: redirect to HTTPS if enabled, otherwise forward to target group
   default_action {
-    type = "redirect"
+    type = var.enable_https_listener ? "redirect" : "forward"
 
-    redirect {
-      port        = "443"
-      protocol    = "HTTPS"
-      status_code = "HTTP_301"
+    # Redirect action (only when HTTPS is enabled)
+    dynamic "redirect" {
+      for_each = var.enable_https_listener ? [1] : []
+      content {
+        port        = "443"
+        protocol    = "HTTPS"
+        status_code = "HTTP_301"
+      }
     }
+
+    # Forward action (only when HTTPS is disabled)
+    target_group_arn = var.enable_https_listener ? null : aws_lb_target_group.app_tg.arn
   }
 }
 
