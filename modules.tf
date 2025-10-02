@@ -165,13 +165,14 @@ module "mongodb" {
   database_name     = var.mongodb_database_name
 
   # Network access configuration - Intelligent IP access list
-  # If VPC peering is enabled and user hasn't customized the default, automatically include VPC CIDR
-  ip_access_list = var.mongodb_vpc_peering_enabled ? [
+  # When VPC peering is enabled, use only external IPs (not VPC CIDR)
+  # When VPC peering is disabled, include VPC CIDR for public access
+  ip_access_list = var.mongodb_vpc_peering_enabled ? var.mongodb_ip_access_list : concat(var.mongodb_ip_access_list, [
     {
       ip_address = module.vpc.vpc_cidr_block
       comment    = "AWS VPC - Automatic VPC CIDR for Fargate and internal resources"
     }
-  ] : var.mongodb_ip_access_list
+  ])
 
   # Optional VPC peering configuration
   vpc_cidr_block      = var.mongodb_vpc_peering_enabled ? module.vpc.vpc_cidr_block : null
