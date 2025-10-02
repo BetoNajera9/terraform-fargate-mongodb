@@ -170,7 +170,7 @@ module "mongodb" {
   ip_access_list = var.mongodb_vpc_peering_enabled ? var.mongodb_ip_access_list : concat(var.mongodb_ip_access_list, [
     {
       ip_address = module.vpc.vpc_cidr_block
-      comment    = "AWS VPC - Automatic VPC CIDR for Fargate and internal resources"
+      comment    = "AWS VPC - Fargate and internal resources"
     }
   ])
 
