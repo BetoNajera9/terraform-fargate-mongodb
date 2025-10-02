@@ -391,7 +391,7 @@ variable "mongodb_ip_access_list" {
 variable "mongodb_vpc_peering_enabled" {
   description = "Enable VPC peering between AWS VPC and MongoDB Atlas for private connectivity"
   type        = bool
-  default     = false # Disabled by default - simpler setup
+  default     = true
 }
 
 variable "mongodb_atlas_cidr_block" {
