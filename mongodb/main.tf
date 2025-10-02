@@ -56,6 +56,11 @@ resource "mongodbatlas_advanced_cluster" "terraform-fargate-mongodb-cluster" {
       ]
     }
   ]
+
+  # Ensure network container is created first if VPC peering is enabled
+  depends_on = [
+    mongodbatlas_network_container.main
+  ]
 }
 
 # Create database user
