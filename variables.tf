@@ -378,7 +378,7 @@ variable "mongodb_ip_access_list" {
   default = [
     {
       ip_address = "0.0.0.0/0"
-      comment    = "Allow all IPs - CHANGE THIS: Use your VPC CIDR (e.g., 10.0.0.0/16) for production"
+      comment    = "Allow all IPs - CHANGE FOR PRODUCTION"
     }
   ]
 
@@ -391,7 +391,7 @@ variable "mongodb_ip_access_list" {
 variable "mongodb_vpc_peering_enabled" {
   description = "Enable VPC peering between AWS VPC and MongoDB Atlas for private connectivity"
   type        = bool
-  default     = true
+  default     = false # Disabled by default - simpler setup
 }
 
 variable "mongodb_atlas_cidr_block" {
